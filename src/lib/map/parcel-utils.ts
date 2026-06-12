@@ -75,3 +75,27 @@ export function getParcelCenter(parcel: Parcel): MapCoordinates {
   const [[y1, x1], [y2, x2]] = parcel.bounds;
   return [(y1 + y2) / 2, (x1 + x2) / 2];
 }
+
+/** Coordenada X del pasillo vertical entre la columna `col` y `col + 1`. */
+export function getColGapX(origin: MapCoordinates, col: number): number {
+  const [, originX] = origin;
+
+  return (
+    originX +
+    BLOCK_PADDING +
+    (col + 1) * (PARCEL_SIZE + PARCEL_GAP) -
+    PARCEL_GAP / 2
+  );
+}
+
+/** Coordenada Y del pasillo horizontal entre la fila `row` y `row + 1`. */
+export function getRowGapY(origin: MapCoordinates, row: number): number {
+  const [originY] = origin;
+
+  return (
+    originY +
+    BLOCK_PADDING +
+    (row + 1) * (PARCEL_SIZE + PARCEL_GAP) -
+    PARCEL_GAP / 2
+  );
+}

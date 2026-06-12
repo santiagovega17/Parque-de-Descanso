@@ -11,6 +11,9 @@ export const MAP_BOUNDS: [[number, number], [number, number]] = [
 export const MAP_DEFAULT_ZOOM = -1;
 export const MAP_MAX_ZOOM = 2;
 
+/** Piso de zoom para medir el encuadre (debe ser menor que el zoom real de ajuste). */
+export const MAP_ABSOLUTE_MIN_ZOOM = -4;
+
 /** Margen base en px al encuadrar el mapa completo (aleja un poco el zoom base). */
 export const MAP_FIT_PADDING = 140;
 

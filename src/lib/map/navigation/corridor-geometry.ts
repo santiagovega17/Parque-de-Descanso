@@ -4,6 +4,8 @@ import { getBlockBounds, getParcelCenter } from "../parcel-utils";
 import type { MapCoordinates, Parcel, ParcelBlock } from "../types";
 
 export const BOULEVARD_CENTER_X = BOULEVARD.x + BOULEVARD.width / 2;
+export const BOULEVARD_TOP_Y = BOULEVARD.y;
+export const BOULEVARD_BOTTOM_Y = BOULEVARD.y + BOULEVARD.height;
 export const BOULEVARD_LEFT_SPINE_X = BOULEVARD.x - BOULEVARD_SIDE_GAP / 2;
 export const BOULEVARD_RIGHT_SPINE_X =
   BOULEVARD.x + BOULEVARD.width + BOULEVARD_SIDE_GAP / 2;

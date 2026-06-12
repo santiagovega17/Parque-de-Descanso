@@ -1,10 +1,10 @@
-import { BOULEVARD } from "../layout";
+import { BOULEVARD, BOULEVARD_SIDE_GAP } from "../layout";
 import type { MapCoordinates } from "../types";
 
-/** Marcador fijo en la base central del boulevard. */
+/** Marcador fijo en la calle principal (marrón) junto a la base del boulevard. */
 export const NAV_START_POINT: MapCoordinates = [
   BOULEVARD.y + BOULEVARD.height,
-  BOULEVARD.x + BOULEVARD.width / 2,
+  BOULEVARD.x - BOULEVARD_SIDE_GAP / 2,
 ];
 
 export const ROUTE_STROKE = "#c0392b";

@@ -8,10 +8,7 @@ import {
   MAP_DEFAULT_ZOOM,
   MAP_MAX_ZOOM,
 } from "@/lib/map/config";
-import {
-  applyMapViewLimits,
-  fitFullMap,
-} from "@/lib/map/map-limits";
+import { fitFullMap } from "@/lib/map/map-limits";
 import { MapControls } from "./MapControls";
 import { ParcelBlocksLayer } from "./ParcelBlocksLayer";
 
@@ -19,18 +16,23 @@ function MapViewLimits() {
   const map = useMap();
 
   useEffect(() => {
-    fitFullMap(map, false);
-
-    const syncLimits = () => {
-      applyMapViewLimits(map);
+    const syncView = () => {
+      fitFullMap(map, false);
     };
 
-    map.on("resize", syncLimits);
-    window.addEventListener("resize", syncLimits);
+    // Esperar al layout real del contenedor (común en tablet / carga dinámica).
+    requestAnimationFrame(() => {
+      requestAnimationFrame(syncView);
+    });
+
+    map.on("resize", syncView);
+    window.addEventListener("resize", syncView);
+    window.visualViewport?.addEventListener("resize", syncView);
 
     return () => {
-      map.off("resize", syncLimits);
-      window.removeEventListener("resize", syncLimits);
+      map.off("resize", syncView);
+      window.removeEventListener("resize", syncView);
+      window.visualViewport?.removeEventListener("resize", syncView);
     };
   }, [map]);
 
@@ -44,7 +46,6 @@ export function InteractiveMap() {
       crs={L.CRS.Simple}
       center={[MAP_BOUNDS[1][0] / 2, MAP_BOUNDS[1][1] / 2]}
       zoom={MAP_DEFAULT_ZOOM}
-      minZoom={MAP_DEFAULT_ZOOM}
       maxZoom={MAP_MAX_ZOOM}
       maxBounds={MAP_BOUNDS}
       maxBoundsViscosity={1}

@@ -1,5 +1,10 @@
 import L from "leaflet";
-import { MAP_BOUNDS, MAP_FIT_PADDING, MAP_FIT_ZOOM_OFFSET } from "./config";
+import {
+  MAP_ABSOLUTE_MIN_ZOOM,
+  MAP_BOUNDS,
+  MAP_FIT_PADDING,
+  MAP_FIT_ZOOM_OFFSET,
+} from "./config";
 
 const boundsLatLng = L.latLngBounds(MAP_BOUNDS);
 
@@ -27,22 +32,32 @@ function getFitBoundsOptions(map: L.Map, animate = false): L.FitBoundsOptions {
   };
 }
 
+/**
+ * Calcula el zoom de encuadre sin el tope de minZoom del contenedor.
+ * Leaflet clampea fitBounds al minZoom actual; si es -1, el padding no tiene efecto.
+ */
+function measureFitView(map: L.Map, animate = false): number {
+  map.invalidateSize({ animate: false });
+  map.setMinZoom(MAP_ABSOLUTE_MIN_ZOOM);
+  map.fitBounds(boundsLatLng, getFitBoundsOptions(map, animate));
+  applyFitZoomOffset(map, animate);
+  return map.getZoom();
+}
+
 /** Zoom mínimo para que el mapa completo quepa en el contenedor actual. */
 export function getMapFitZoom(map: L.Map): number {
   const center = map.getCenter();
   const zoom = map.getZoom();
-  map.fitBounds(boundsLatLng, getFitBoundsOptions(map));
-  applyFitZoomOffset(map);
-  const fitZoom = map.getZoom();
+  const fitZoom = measureFitView(map, false);
   map.setView(center, zoom, { animate: false });
   return fitZoom;
 }
 
 /** Aplica límites de pan y zoom: la vista de fitBounds es el tamaño máximo. */
 export function applyMapViewLimits(map: L.Map): void {
-  map.setMaxBounds(boundsLatLng);
   const fitZoom = getMapFitZoom(map);
   map.setMinZoom(fitZoom);
+  map.setMaxBounds(boundsLatLng);
 
   if (map.getZoom() < fitZoom) {
     map.setZoom(fitZoom);
@@ -51,7 +66,7 @@ export function applyMapViewLimits(map: L.Map): void {
 
 /** Centra el mapa completo (equivalente al botón "Ver mapa completo"). */
 export function fitFullMap(map: L.Map, animate = true): void {
-  applyMapViewLimits(map);
-  map.fitBounds(MAP_BOUNDS, getFitBoundsOptions(map, animate));
-  applyFitZoomOffset(map, animate);
+  const fitZoom = measureFitView(map, animate);
+  map.setMinZoom(fitZoom);
+  map.setMaxBounds(boundsLatLng);
 }
