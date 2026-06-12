@@ -21,6 +21,21 @@ export function getBlockSouthCorridorY(block: ParcelBlock): number {
   return block.origin[0] + BLOCK_HEIGHT + BLOCK_GAP / 2;
 }
 
+/** Calle horizontal justo arriba del bloque. */
+export function getBlockNorthCorridorY(block: ParcelBlock): number {
+  return block.origin[0] - BLOCK_GAP / 2;
+}
+
+/** Calle vertical justo a la derecha del bloque. */
+export function getBlockEastCorridorX(block: ParcelBlock): number {
+  return block.origin[1] + BLOCK_WIDTH + BLOCK_GAP / 2;
+}
+
+/** Calle vertical justo a la izquierda del bloque. */
+export function getBlockWestCorridorX(block: ParcelBlock): number {
+  return block.origin[1] - BLOCK_GAP / 2;
+}
+
 /** Punto en la calle de abajo, alineado con la columna de la parcela. */
 export function getParcelSouthStreetStop(
   parcel: Parcel,

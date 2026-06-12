@@ -1,5 +1,5 @@
 import L from "leaflet";
-import { MAP_BOUNDS, MAP_FIT_PADDING } from "./config";
+import { MAP_BOUNDS, MAP_FIT_PADDING, MAP_FIT_ZOOM_OFFSET } from "./config";
 
 const boundsLatLng = L.latLngBounds(MAP_BOUNDS);
 
@@ -9,13 +9,15 @@ function getFitPadding(map: L.Map): L.PointExpression {
   let pad = MAP_FIT_PADDING;
 
   if (height > width) {
-    pad = Math.round(pad * 1.6);
-  }
-  if (width < 900) {
-    pad = Math.round(pad * 1.2);
+    pad = Math.max(pad, Math.round(width * 0.34), Math.round(height * 0.14));
   }
 
   return [pad, pad];
+}
+
+function applyFitZoomOffset(map: L.Map, animate = false): void {
+  if (MAP_FIT_ZOOM_OFFSET === 0) return;
+  map.setZoom(map.getZoom() + MAP_FIT_ZOOM_OFFSET, { animate });
 }
 
 function getFitBoundsOptions(map: L.Map, animate = false): L.FitBoundsOptions {
@@ -30,6 +32,7 @@ export function getMapFitZoom(map: L.Map): number {
   const center = map.getCenter();
   const zoom = map.getZoom();
   map.fitBounds(boundsLatLng, getFitBoundsOptions(map));
+  applyFitZoomOffset(map);
   const fitZoom = map.getZoom();
   map.setView(center, zoom, { animate: false });
   return fitZoom;
@@ -50,4 +53,5 @@ export function applyMapViewLimits(map: L.Map): void {
 export function fitFullMap(map: L.Map, animate = true): void {
   applyMapViewLimits(map);
   map.fitBounds(MAP_BOUNDS, getFitBoundsOptions(map, animate));
+  applyFitZoomOffset(map, animate);
 }

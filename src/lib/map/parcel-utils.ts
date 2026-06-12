@@ -13,6 +13,17 @@ export function getParcelNumber(row: number, col: number): number {
   return row * PARCELS_PER_SIDE + (PARCELS_PER_SIDE - col);
 }
 
+/** Fila y columna (0-based) de una parcela dentro de su bloque. */
+export function getParcelGridPosition(number: number): {
+  row: number;
+  col: number;
+} {
+  const row = Math.floor((number - 1) / PARCELS_PER_SIDE);
+  const col = PARCELS_PER_SIDE - 1 - ((number - 1) % PARCELS_PER_SIDE);
+
+  return { row, col };
+}
+
 export function createParcelBounds(
   origin: MapCoordinates,
   row: number,
