@@ -14,12 +14,20 @@ import {
   getBoulevardSpineX,
   getParcelDestination,
 } from "./corridor-geometry";
-import { simplifyPath } from "./route-utils";
+import { orthogonalizePath, simplifyPath } from "./route-utils";
 
 type BlockApproach = "south" | "north" | "east" | "west";
 
 /** Orden de preferencia: abajo → costados → arriba. */
 const APPROACH_PRIORITY: BlockApproach[] = ["south", "east", "west", "north"];
+
+/** Fila superior: siempre entrar por arriba. */
+const TOP_ROW_APPROACH_PRIORITY: BlockApproach[] = [
+  "north",
+  "south",
+  "east",
+  "west",
+];
 
 function pushPoint(points: MapCoordinates[], point: MapCoordinates) {
   const previous = points[points.length - 1];
@@ -53,10 +61,12 @@ function countParcelsCrossed(
 }
 
 function pickBestApproach(row: number, col: number): BlockApproach {
-  let best: BlockApproach = "south";
+  const priority =
+    row === 0 ? TOP_ROW_APPROACH_PRIORITY : APPROACH_PRIORITY;
+  let best: BlockApproach = priority[0];
   let bestCount = Infinity;
 
-  for (const approach of APPROACH_PRIORITY) {
+  for (const approach of priority) {
     const count = countParcelsCrossed(row, col, approach);
 
     if (count < bestCount) {
@@ -83,7 +93,6 @@ function getMainStreetTargetY(
   }
 }
 
-/** Recorre la calle principal (marrón, spine lateral) sin pisar el boulevard verde. */
 function routeAlongMainStreet(
   points: MapCoordinates[],
   spineX: number,
@@ -117,7 +126,9 @@ function routeFromMainStreetToBlockEdge(
       pushPoint(points, [southY, parcelX]);
       break;
     case "north":
-      pushPoint(points, [northY, parcelX]);
+      if (!useGapRouting) {
+        pushPoint(points, [northY, parcelX]);
+      }
       break;
     case "east":
       pushPoint(points, [southY, eastX]);
@@ -138,16 +149,17 @@ function routeFromMainStreetToBlockEdge(
   }
 }
 
-/**
- * Dentro del bloque, sigue los pasillos entre parcelas (sin pisar el centro de otras).
- */
 function routeThroughParcelGaps(
   points: MapCoordinates[],
   block: ParcelBlock,
   row: number,
   col: number,
   approach: BlockApproach,
+  parcelX: number,
 ) {
+  const northY = getBlockNorthCorridorY(block);
+  const eastX = getBlockEastCorridorX(block);
+  const westX = getBlockWestCorridorX(block);
   const bottomEntryRow = PARCELS_PER_SIDE - 2;
 
   switch (approach) {
@@ -163,6 +175,7 @@ function routeThroughParcelGaps(
         pushPoint(points, [turnY, getColGapX(block.origin, col - 1)]);
       }
 
+      pushPoint(points, [turnY, parcelX]);
       break;
     }
     case "west": {
@@ -177,6 +190,7 @@ function routeThroughParcelGaps(
         pushPoint(points, [turnY, getColGapX(block.origin, col)]);
       }
 
+      pushPoint(points, [turnY, parcelX]);
       break;
     }
     case "south": {
@@ -189,6 +203,7 @@ function routeThroughParcelGaps(
         pushPoint(points, [getRowGapY(block.origin, row - 1), aisleX]);
       }
 
+      pushPoint(points, [getRowGapY(block.origin, row - 1), parcelX]);
       break;
     }
     case "north": {
@@ -196,8 +211,10 @@ function routeThroughParcelGaps(
       const entryY = getRowGapY(block.origin, 0);
       const turnY = getRowGapY(block.origin, row - 1);
 
+      pushPoint(points, [northY, aisleX]);
       pushPoint(points, [entryY, aisleX]);
       pushPoint(points, [turnY, aisleX]);
+      pushPoint(points, [turnY, parcelX]);
       break;
     }
   }
@@ -229,12 +246,19 @@ function buildParcelRoute(
   );
 
   if (useGapRouting) {
-    routeThroughParcelGaps(points, block, row, col, approach);
+    routeThroughParcelGaps(
+      points,
+      block,
+      row,
+      col,
+      approach,
+      parcelX,
+    );
   }
 
   pushPoint(points, [parcelY, parcelX]);
 
-  return simplifyPath(points);
+  return simplifyPath(orthogonalizePath(points));
 }
 
 export function routeToParcel(
@@ -259,5 +283,5 @@ export function routeToBlock(block: ParcelBlock): MapCoordinates[] {
   pushPoint(points, [streetY, streetX]);
   pushPoint(points, [blockCenterY, streetX]);
 
-  return simplifyPath(points);
+  return simplifyPath(orthogonalizePath(points));
 }

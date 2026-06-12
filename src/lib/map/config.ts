@@ -17,5 +17,5 @@ export const MAP_ABSOLUTE_MIN_ZOOM = -4;
 /** Margen base en px al encuadrar el mapa completo (aleja un poco el zoom base). */
 export const MAP_FIT_PADDING = 140;
 
-/** Pasos extra de zoom hacia afuera tras encuadrar (negativo = más alejado). */
-export const MAP_FIT_ZOOM_OFFSET: number = -0.75;
+/** +2.5 respecto al encuadre con padding (equivale a 5 pulsaciones de + con zoomDelta 0.5). */
+export const MAP_FIT_ZOOM_OFFSET: number = 1.75;
