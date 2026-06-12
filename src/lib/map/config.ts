@@ -11,5 +11,5 @@ export const MAP_BOUNDS: [[number, number], [number, number]] = [
 export const MAP_DEFAULT_ZOOM = -1;
 export const MAP_MAX_ZOOM = 2;
 
-/** Margen en px al encuadrar el mapa completo (aleja un poco el zoom base). */
-export const MAP_FIT_PADDING = 48;
+/** Margen base en px al encuadrar el mapa completo (aleja un poco el zoom base). */
+export const MAP_FIT_PADDING = 72;
