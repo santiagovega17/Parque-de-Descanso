@@ -15,4 +15,4 @@ export const MAP_MAX_ZOOM = 2;
 export const MAP_FIT_PADDING = 140;
 
 /** Pasos extra de zoom hacia afuera tras encuadrar (negativo = más alejado). */
-export const MAP_FIT_ZOOM_OFFSET = -0.75;
+export const MAP_FIT_ZOOM_OFFSET: number = -0.75;
