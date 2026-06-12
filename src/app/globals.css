@@ -1,8 +1,9 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f7f2;
+  --foreground: #1f3d2b;
 }
 
 @theme inline {
@@ -12,15 +13,62 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
+  overscroll-behavior: none;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+.touch-map .leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: #e8efe3;
+  font-family: inherit;
+  touch-action: none;
+}
+
+.touch-map .leaflet-pane,
+.touch-map .leaflet-top,
+.touch-map .leaflet-bottom {
+  z-index: auto;
+}
+
+.map-control-btn {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.touch-map .leaflet-overlay-pane svg.leaflet-image-layer {
+  pointer-events: none;
+}
+
+.touch-map .map-parcel {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.touch-map .map-parcel-cell {
+  pointer-events: auto;
+  transition: filter 120ms ease, stroke 120ms ease, stroke-width 120ms ease;
+}
+
+.touch-map .map-parcel:hover .map-parcel-cell {
+  filter: brightness(0.94);
+}
+
+.touch-map .map-parcel--selected .map-parcel-cell {
+  stroke: #1f3d2b;
+  stroke-width: 4;
+  paint-order: stroke fill;
+  filter: brightness(0.9);
+}
+
+.touch-map .map-parcel-label {
+  pointer-events: none;
+  user-select: none;
 }
