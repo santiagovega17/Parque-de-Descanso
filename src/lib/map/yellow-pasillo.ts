@@ -1,6 +1,6 @@
 import { LEFT_ORIGIN_X, YELLOW_TIER_Y, gridOrigin } from "./layout";
 import { BLOCK_HEIGHT, BLOCK_WIDTH } from "./parcel-config";
-import { PASILLO_CROSS_GAP, type PasilloIntersection } from "./pasillo-config";
+import { PASILLO_CROSS_GAP, PASILLO_ROW_GAP, type PasilloIntersection } from "./pasillo-config";
 import type { ParcelBlock, PasilloInnerCorner } from "./types";
 
 /** Origen del 2×2 amarillo con pasillo (columnas 1 y 2 del sector amarillo). */
@@ -11,12 +11,15 @@ export const YELLOW_PASILLO_ORIGIN_X = YELLOW_PASILLO_ORIGIN[1];
 export const YELLOW_PASILLO_INTERSECTION: PasilloIntersection = {
   id: "yellow",
   centerX: YELLOW_PASILLO_ORIGIN_X + BLOCK_WIDTH + PASILLO_CROSS_GAP / 2,
-  centerY: YELLOW_PASILLO_ORIGIN_Y + BLOCK_HEIGHT + PASILLO_CROSS_GAP / 2,
+  centerY: YELLOW_PASILLO_ORIGIN_Y + BLOCK_HEIGHT + PASILLO_ROW_GAP / 2,
+  label: "Administración",
+  iconSrc: "/icons/administracion.svg",
+  iconOffsetY: -15,
 };
 
 function pasilloOrigin(row: number, col: number): [number, number] {
   return [
-    YELLOW_PASILLO_ORIGIN_Y + row * (BLOCK_HEIGHT + PASILLO_CROSS_GAP),
+    YELLOW_PASILLO_ORIGIN_Y + row * (BLOCK_HEIGHT + PASILLO_ROW_GAP),
     YELLOW_PASILLO_ORIGIN_X + col * (BLOCK_WIDTH + PASILLO_CROSS_GAP),
   ];
 }

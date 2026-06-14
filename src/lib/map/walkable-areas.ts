@@ -1,5 +1,6 @@
 import {
   BLOCK_GAP,
+  BLOCK_ROW_GAP,
   BOULEVARD,
   BOULEVARD_SIDE_GAP,
   GREEN_TIER_Y,
@@ -35,7 +36,7 @@ function addColumnGaps(
   cols: number,
   gap = BLOCK_GAP,
 ) {
-  const rowSpan = rows * BLOCK_HEIGHT + (rows - 1) * gap;
+  const rowSpan = rows * BLOCK_HEIGHT + (rows - 1) * BLOCK_ROW_GAP;
 
   for (let col = 0; col < cols - 1; col += 1) {
     rects.push({
@@ -53,7 +54,7 @@ function addRowGaps(
   baseX: number,
   rows: number,
   cols: number,
-  gap = BLOCK_GAP,
+  gap = BLOCK_ROW_GAP,
 ) {
   const colSpan = cols * BLOCK_WIDTH + (cols - 1) * gap;
 
@@ -141,7 +142,7 @@ export function getWalkableRects(): WalkableRect[] {
     x: SOLID_LEFT_ORIGIN_X + 2 * BLOCK_WIDTH + BLOCK_GAP,
     y: VIOLET_TIER_Y,
     width: BLOCK_GAP,
-    height: 3 * BLOCK_HEIGHT + 2 * BLOCK_GAP,
+    height: 3 * BLOCK_HEIGHT + 2 * BLOCK_ROW_GAP,
   });
 
   // Bloque 28 (solo fila superior violeta).
@@ -160,7 +161,7 @@ export function getWalkableRects(): WalkableRect[] {
     x: LEFT_ORIGIN_X + BLOCK_WIDTH,
     y: YELLOW_PASILLO_ORIGIN_Y,
     width: BLOCK_GAP,
-    height: 2 * BLOCK_HEIGHT + BLOCK_GAP,
+    height: 2 * BLOCK_HEIGHT + BLOCK_ROW_GAP,
   });
 
   // Sector naranja: pasillo 2×2.
@@ -179,14 +180,14 @@ export function getWalkableRects(): WalkableRect[] {
   addLeftSectorWidthTierGap(rects, VIOLET_TIER_Y + BLOCK_HEIGHT);
   addRightSectorWidthTierGap(rects, VIOLET_TIER_Y + BLOCK_HEIGHT);
 
-  addLeftSectorWidthTierGap(rects, ORANGE_TIER_Y + 2 * BLOCK_HEIGHT + BLOCK_GAP);
-  addRightSectorWidthTierGap(rects, ORANGE_TIER_Y + 2 * BLOCK_HEIGHT + BLOCK_GAP);
+  addLeftSectorWidthTierGap(rects, ORANGE_TIER_Y + 2 * BLOCK_HEIGHT + BLOCK_ROW_GAP);
+  addRightSectorWidthTierGap(rects, ORANGE_TIER_Y + 2 * BLOCK_HEIGHT + BLOCK_ROW_GAP);
 
   // Pasillos laterales del boulevard en cada cruce de nivel.
   const boulevardTierGaps = [
     VIOLET_TOP_TIER_Y + BLOCK_HEIGHT,
     VIOLET_TIER_Y + BLOCK_HEIGHT,
-    ORANGE_TIER_Y + 2 * BLOCK_HEIGHT + BLOCK_GAP,
+    ORANGE_TIER_Y + 2 * BLOCK_HEIGHT + BLOCK_ROW_GAP,
   ];
 
   for (const y of boulevardTierGaps) {

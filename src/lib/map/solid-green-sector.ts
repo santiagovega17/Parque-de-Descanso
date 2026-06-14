@@ -1,5 +1,6 @@
 import {
   BLOCK_GAP,
+  BLOCK_ROW_GAP,
   SOLID_BLOCK_STRIDE,
   SOLID_LEFT_ORIGIN_X,
   VIOLET_TIER_Y,
@@ -13,7 +14,7 @@ import type { ParcelBlock } from "./types";
 
 function solidOrigin(row: number, col: number): [number, number] {
   return [
-    VIOLET_TIER_Y + row * (BLOCK_HEIGHT + BLOCK_GAP),
+    VIOLET_TIER_Y + row * (BLOCK_HEIGHT + BLOCK_ROW_GAP),
     SOLID_LEFT_ORIGIN_X + col * SOLID_BLOCK_STRIDE,
   ];
 }

@@ -8,13 +8,18 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import type { PasilloIntersection } from "@/lib/map/pasillo-config";
+import { getPasilloById } from "@/lib/map/pasillos";
 import { getParcelById, getParcelLabel } from "@/lib/map/parcels";
 import type { Parcel } from "@/lib/map/types";
 
 type MapSelectionContextValue = {
   selectedParcel: Parcel | null;
   selectedParcelLabel: string | null;
+  selectedPasillo: PasilloIntersection | null;
+  selectedPasilloLabel: string | null;
   selectParcel: (parcelId: string) => void;
+  selectPasillo: (pasilloId: string) => void;
   clearSelection: () => void;
 };
 
@@ -22,10 +27,16 @@ const MapSelectionContext = createContext<MapSelectionContextValue | null>(null)
 
 export function MapSelectionProvider({ children }: { children: ReactNode }) {
   const [selectedParcelId, setSelectedParcelId] = useState<string | null>(null);
+  const [selectedPasilloId, setSelectedPasilloId] = useState<string | null>(null);
 
   const selectedParcel = useMemo(
     () => (selectedParcelId ? (getParcelById(selectedParcelId) ?? null) : null),
     [selectedParcelId],
+  );
+
+  const selectedPasillo = useMemo(
+    () => (selectedPasilloId ? (getPasilloById(selectedPasilloId) ?? null) : null),
+    [selectedPasilloId],
   );
 
   const selectedParcelLabel = useMemo(
@@ -33,22 +44,45 @@ export function MapSelectionProvider({ children }: { children: ReactNode }) {
     [selectedParcel],
   );
 
+  const selectedPasilloLabel = useMemo(
+    () => selectedPasillo?.label ?? null,
+    [selectedPasillo],
+  );
+
   const selectParcel = useCallback((parcelId: string) => {
     setSelectedParcelId(parcelId);
+    setSelectedPasilloId(null);
+  }, []);
+
+  const selectPasillo = useCallback((pasilloId: string) => {
+    setSelectedPasilloId(pasilloId);
+    setSelectedParcelId(null);
   }, []);
 
   const clearSelection = useCallback(() => {
     setSelectedParcelId(null);
+    setSelectedPasilloId(null);
   }, []);
 
   const value = useMemo(
     () => ({
       selectedParcel,
       selectedParcelLabel,
+      selectedPasillo,
+      selectedPasilloLabel,
       selectParcel,
+      selectPasillo,
       clearSelection,
     }),
-    [selectedParcel, selectedParcelLabel, selectParcel, clearSelection],
+    [
+      selectedParcel,
+      selectedParcelLabel,
+      selectedPasillo,
+      selectedPasilloLabel,
+      selectParcel,
+      selectPasillo,
+      clearSelection,
+    ],
   );
 
   return (

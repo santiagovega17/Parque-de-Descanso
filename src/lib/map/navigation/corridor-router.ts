@@ -1,9 +1,5 @@
 import { BLOCK_HEIGHT, BLOCK_WIDTH, PARCELS_PER_SIDE } from "../parcel-config";
-import {
-  getColGapX,
-  getParcelGridPosition,
-  getRowGapY,
-} from "../parcel-utils";
+import { getParcelGridPosition } from "../parcel-utils";
 import type { MapCoordinates, Parcel, ParcelBlock } from "../types";
 import { NAV_START_POINT } from "./config";
 import {
@@ -14,7 +10,12 @@ import {
   getBoulevardSpineX,
   getParcelDestination,
 } from "./corridor-geometry";
-import { orthogonalizePath, simplifyPath } from "./route-utils";
+import {
+  orthogonalizePath,
+  removeSpuriousJogs,
+  simplifyPath,
+} from "./route-utils";
+import { wrapRouteAroundPasillos } from "./pasillo-route";
 
 type BlockApproach = "south" | "north" | "east" | "west";
 
@@ -107,158 +108,84 @@ function routeAlongMainStreet(
   pushPoint(points, [targetY, spineX]);
 }
 
-function routeFromMainStreetToBlockEdge(
+/** Desde la calle principal, entra al bloque en línea recta (atravesando parcelas si hace falta). */
+function routeFromMainStreetToParcel(
   points: MapCoordinates[],
   block: ParcelBlock,
   approach: BlockApproach,
+  spineX: number,
   parcelX: number,
   parcelY: number,
-  useGapRouting: boolean,
 ) {
   const southY = getBlockSouthCorridorY(block);
   const northY = getBlockNorthCorridorY(block);
   const eastX = getBlockEastCorridorX(block);
   const westX = getBlockWestCorridorX(block);
-  const bottomEntryRow = PARCELS_PER_SIDE - 2;
 
   switch (approach) {
     case "south":
-      pushPoint(points, [southY, parcelX]);
+      if (Math.abs(spineX - parcelX) > 1) {
+        pushPoint(points, [southY, parcelX]);
+      }
+
+      pushPoint(points, [parcelY, parcelX]);
       break;
     case "north":
-      if (!useGapRouting) {
+      if (Math.abs(spineX - parcelX) > 1) {
         pushPoint(points, [northY, parcelX]);
       }
+
+      pushPoint(points, [parcelY, parcelX]);
       break;
     case "east":
       pushPoint(points, [southY, eastX]);
-      if (useGapRouting) {
-        pushPoint(points, [getRowGapY(block.origin, bottomEntryRow), eastX]);
-      } else {
-        pushPoint(points, [parcelY, eastX]);
+      pushPoint(points, [parcelY, eastX]);
+
+      if (Math.abs(parcelX - eastX) > 1) {
+        pushPoint(points, [parcelY, parcelX]);
       }
+
       break;
     case "west":
       pushPoint(points, [southY, westX]);
-      if (useGapRouting) {
-        pushPoint(points, [getRowGapY(block.origin, bottomEntryRow), westX]);
-      } else {
-        pushPoint(points, [parcelY, westX]);
+      pushPoint(points, [parcelY, westX]);
+
+      if (Math.abs(parcelX - westX) > 1) {
+        pushPoint(points, [parcelY, parcelX]);
       }
+
       break;
   }
 }
 
-function routeThroughParcelGaps(
-  points: MapCoordinates[],
-  block: ParcelBlock,
-  row: number,
-  col: number,
-  approach: BlockApproach,
-  parcelX: number,
-) {
-  const northY = getBlockNorthCorridorY(block);
-  const eastX = getBlockEastCorridorX(block);
-  const westX = getBlockWestCorridorX(block);
-  const bottomEntryRow = PARCELS_PER_SIDE - 2;
+function finalizeRoute(points: MapCoordinates[]): MapCoordinates[] {
+  const simplified = removeSpuriousJogs(simplifyPath(orthogonalizePath(points)));
 
-  switch (approach) {
-    case "east": {
-      const aisleX = getColGapX(block.origin, col);
-      const entryY = getRowGapY(block.origin, bottomEntryRow);
-      const turnY = getRowGapY(block.origin, row);
-
-      pushPoint(points, [entryY, aisleX]);
-      pushPoint(points, [turnY, aisleX]);
-
-      if (col > 0) {
-        pushPoint(points, [turnY, getColGapX(block.origin, col - 1)]);
-      }
-
-      pushPoint(points, [turnY, parcelX]);
-      break;
-    }
-    case "west": {
-      const aisleX = getColGapX(block.origin, col - 1);
-      const entryY = getRowGapY(block.origin, bottomEntryRow);
-      const turnY = getRowGapY(block.origin, row);
-
-      pushPoint(points, [entryY, aisleX]);
-      pushPoint(points, [turnY, aisleX]);
-
-      if (col < PARCELS_PER_SIDE - 1) {
-        pushPoint(points, [turnY, getColGapX(block.origin, col)]);
-      }
-
-      pushPoint(points, [turnY, parcelX]);
-      break;
-    }
-    case "south": {
-      const aisleX = getColGapX(block.origin, col - 1);
-      const entryY = getRowGapY(block.origin, bottomEntryRow);
-
-      pushPoint(points, [entryY, aisleX]);
-
-      if (row > 0) {
-        pushPoint(points, [getRowGapY(block.origin, row - 1), aisleX]);
-      }
-
-      pushPoint(points, [getRowGapY(block.origin, row - 1), parcelX]);
-      break;
-    }
-    case "north": {
-      const aisleX = getColGapX(block.origin, col - 1);
-      const entryY = getRowGapY(block.origin, 0);
-      const turnY = getRowGapY(block.origin, row - 1);
-
-      pushPoint(points, [northY, aisleX]);
-      pushPoint(points, [entryY, aisleX]);
-      pushPoint(points, [turnY, aisleX]);
-      pushPoint(points, [turnY, parcelX]);
-      break;
-    }
-  }
+  return wrapRouteAroundPasillos(simplified);
 }
 
 function buildParcelRoute(
   parcel: Parcel,
   block: ParcelBlock,
   approach: BlockApproach,
-  row: number,
-  col: number,
 ): MapCoordinates[] {
-  const [parcelY, parcelX] = getParcelDestination(parcel);
+  const [parcelY, parcelX] = getParcelDestination(parcel, block, approach);
   const spineX = getBoulevardSpineX(block);
   const mainStreetY = getMainStreetTargetY(approach, block);
-  const parcelsCrossed = countParcelsCrossed(row, col, approach);
-  const useGapRouting = parcelsCrossed > 0;
 
   const points: MapCoordinates[] = [NAV_START_POINT];
 
   routeAlongMainStreet(points, spineX, mainStreetY);
-  routeFromMainStreetToBlockEdge(
+  routeFromMainStreetToParcel(
     points,
     block,
     approach,
+    spineX,
     parcelX,
     parcelY,
-    useGapRouting,
   );
 
-  if (useGapRouting) {
-    routeThroughParcelGaps(
-      points,
-      block,
-      row,
-      col,
-      approach,
-      parcelX,
-    );
-  }
-
-  pushPoint(points, [parcelY, parcelX]);
-
-  return simplifyPath(orthogonalizePath(points));
+  return finalizeRoute(points);
 }
 
 export function routeToParcel(
@@ -268,7 +195,7 @@ export function routeToParcel(
   const { row, col } = getParcelGridPosition(parcel.number);
   const approach = pickBestApproach(row, col);
 
-  return buildParcelRoute(parcel, block, approach, row, col);
+  return buildParcelRoute(parcel, block, approach);
 }
 
 export function routeToBlock(block: ParcelBlock): MapCoordinates[] {
@@ -283,5 +210,21 @@ export function routeToBlock(block: ParcelBlock): MapCoordinates[] {
   pushPoint(points, [streetY, streetX]);
   pushPoint(points, [blockCenterY, streetX]);
 
-  return simplifyPath(orthogonalizePath(points));
+  return finalizeRoute(points);
+}
+
+export function routeToPasillo(
+  centerY: number,
+  centerX: number,
+  spineX: number,
+): MapCoordinates[] {
+  const points: MapCoordinates[] = [NAV_START_POINT];
+
+  routeAlongMainStreet(points, spineX, centerY);
+
+  if (Math.abs(spineX - centerX) > 1) {
+    pushPoint(points, [centerY, centerX]);
+  }
+
+  return finalizeRoute(points);
 }

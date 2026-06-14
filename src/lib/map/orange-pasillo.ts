@@ -1,6 +1,6 @@
-import { BLOCK_GAP, ORANGE_TIER_Y, RIGHT_ORIGIN_X } from "./layout";
+import { ORANGE_TIER_Y, RIGHT_ORIGIN_X } from "./layout";
 import { BLOCK_HEIGHT, BLOCK_WIDTH } from "./parcel-config";
-import { PASILLO_CROSS_GAP, type PasilloIntersection } from "./pasillo-config";
+import { PASILLO_CROSS_GAP, PASILLO_ROW_GAP, type PasilloIntersection } from "./pasillo-config";
 import type { ParcelBlock, PasilloInnerCorner } from "./types";
 
 export const ORANGE_PASILLO_ORIGIN_X = RIGHT_ORIGIN_X;
@@ -9,12 +9,15 @@ export const ORANGE_PASILLO_ORIGIN_Y = ORANGE_TIER_Y;
 export const ORANGE_PASILLO_INTERSECTION: PasilloIntersection = {
   id: "orange",
   centerX: ORANGE_PASILLO_ORIGIN_X + BLOCK_WIDTH + PASILLO_CROSS_GAP / 2,
-  centerY: ORANGE_PASILLO_ORIGIN_Y + BLOCK_HEIGHT + PASILLO_CROSS_GAP / 2,
+  centerY: ORANGE_PASILLO_ORIGIN_Y + BLOCK_HEIGHT + PASILLO_ROW_GAP / 2,
+  label: "Iglesia",
+  iconSrc: "/icons/iglesia.svg",
+  iconOffsetY: -10,
 };
 
 function pasilloOrigin(row: number, col: number): [number, number] {
   return [
-    ORANGE_PASILLO_ORIGIN_Y + row * (BLOCK_HEIGHT + PASILLO_CROSS_GAP),
+    ORANGE_PASILLO_ORIGIN_Y + row * (BLOCK_HEIGHT + PASILLO_ROW_GAP),
     ORANGE_PASILLO_ORIGIN_X + col * (BLOCK_WIDTH + PASILLO_CROSS_GAP),
   ];
 }

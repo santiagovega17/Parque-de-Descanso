@@ -72,3 +72,28 @@ body {
   pointer-events: none;
   user-select: none;
 }
+
+.touch-map .map-pasillo[data-pasillo-selectable] {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.touch-map .map-pasillo-hit {
+  pointer-events: auto;
+}
+
+.touch-map .map-pasillo-shape {
+  pointer-events: none;
+  transition: filter 120ms ease, stroke 120ms ease, stroke-width 120ms ease;
+}
+
+.touch-map .map-pasillo[data-pasillo-selectable]:hover .map-pasillo-shape {
+  filter: brightness(0.94);
+}
+
+.touch-map .map-pasillo--selected .map-pasillo-shape {
+  stroke: #1f3d2b;
+  stroke-width: 4;
+  paint-order: stroke fill;
+  filter: brightness(0.9);
+}

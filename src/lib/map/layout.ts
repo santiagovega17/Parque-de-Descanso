@@ -1,10 +1,12 @@
-import { MAP_IMAGE_HEIGHT } from "./config";
+import { MAP_CONTENT_HEIGHT } from "./config";
 import { BLOCK_HEIGHT, BLOCK_WIDTH } from "./parcel-config";
 
 export const BLOCK_GAP = 48;
+/** Separación vertical entre filas de bloques. */
+export const BLOCK_ROW_GAP = 100;
 export const BOULEVARD_WIDTH = 48;
 export const BOULEVARD_SIDE_GAP = 96;
-export const TIER_GAP = 48;
+export const TIER_GAP = 100;
 export const LAYOUT_MARGIN = 40;
 
 export const LEFT_COLUMNS = 3;
@@ -15,7 +17,7 @@ export const LEFT_GRID_WIDTH =
 export const RIGHT_GRID_WIDTH =
   RIGHT_COLUMNS * BLOCK_WIDTH + (RIGHT_COLUMNS - 1) * BLOCK_GAP;
 
-export const TWO_ROW_TIER_HEIGHT = 2 * BLOCK_HEIGHT + BLOCK_GAP;
+export const TWO_ROW_TIER_HEIGHT = 2 * BLOCK_HEIGHT + BLOCK_ROW_GAP;
 export const ONE_ROW_TIER_HEIGHT = BLOCK_HEIGHT;
 
 const RIGHT_COLUMN_HEIGHT = 3 * TWO_ROW_TIER_HEIGHT + 2 * TIER_GAP;
@@ -27,7 +29,7 @@ export const SOLID_BLOCK_STRIDE = BLOCK_WIDTH + BLOCK_GAP;
 export const SOLID_LEFT_ORIGIN_X = LAYOUT_MARGIN;
 export const LEFT_ORIGIN_X = SOLID_LEFT_ORIGIN_X + 2 * SOLID_BLOCK_STRIDE;
 
-export const LAYOUT_ORIGIN_Y = (MAP_IMAGE_HEIGHT - RIGHT_COLUMN_HEIGHT) / 2;
+export const LAYOUT_ORIGIN_Y = (MAP_CONTENT_HEIGHT - RIGHT_COLUMN_HEIGHT) / 2;
 export const RIGHT_ORIGIN_X =
   LEFT_ORIGIN_X +
   LEFT_GRID_WIDTH +
@@ -65,7 +67,7 @@ export function gridOrigin(
   col: number,
 ): [number, number] {
   return [
-    baseY + row * (BLOCK_HEIGHT + BLOCK_GAP),
+    baseY + row * (BLOCK_HEIGHT + BLOCK_ROW_GAP),
     baseX + col * (BLOCK_WIDTH + BLOCK_GAP),
   ];
 }

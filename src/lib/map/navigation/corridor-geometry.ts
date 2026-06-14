@@ -1,7 +1,8 @@
-import { BLOCK_GAP, BOULEVARD, BOULEVARD_SIDE_GAP } from "../layout";
+import { BLOCK_GAP, BLOCK_ROW_GAP, BOULEVARD, BOULEVARD_SIDE_GAP } from "../layout";
 import { BLOCK_HEIGHT, BLOCK_WIDTH } from "../parcel-config";
 import { getBlockBounds, getParcelCenter } from "../parcel-utils";
 import type { MapCoordinates, Parcel, ParcelBlock } from "../types";
+import { getPasilloChamferDestination } from "./pasillo-chamfer-destinations";
 
 export const BOULEVARD_CENTER_X = BOULEVARD.x + BOULEVARD.width / 2;
 export const BOULEVARD_TOP_Y = BOULEVARD.y;
@@ -20,12 +21,12 @@ export function getBoulevardSpineX(block: ParcelBlock): number {
 
 /** Calle horizontal justo debajo del bloque. */
 export function getBlockSouthCorridorY(block: ParcelBlock): number {
-  return block.origin[0] + BLOCK_HEIGHT + BLOCK_GAP / 2;
+  return block.origin[0] + BLOCK_HEIGHT + BLOCK_ROW_GAP / 2;
 }
 
 /** Calle horizontal justo arriba del bloque. */
 export function getBlockNorthCorridorY(block: ParcelBlock): number {
-  return block.origin[0] - BLOCK_GAP / 2;
+  return block.origin[0] - BLOCK_ROW_GAP / 2;
 }
 
 /** Calle vertical justo a la derecha del bloque. */
@@ -48,8 +49,20 @@ export function getParcelSouthStreetStop(
   return [getBlockSouthCorridorY(block), parcelX];
 }
 
-/** Destino final dentro de la parcela. */
-export function getParcelDestination(parcel: Parcel): MapCoordinates {
+/** Destino final dentro de la parcela, o en el corte del chaflán del pasillo. */
+export function getParcelDestination(
+  parcel: Parcel,
+  block?: ParcelBlock,
+  approach?: "south" | "north" | "east" | "west",
+): MapCoordinates {
+  if (block && approach) {
+    const chamferStop = getPasilloChamferDestination(parcel, block, approach);
+
+    if (chamferStop) {
+      return chamferStop;
+    }
+  }
+
   return getParcelCenter(parcel);
 }
 

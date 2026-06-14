@@ -1,10 +1,11 @@
-import { BOULEVARD, BOULEVARD_SIDE_GAP } from "../layout";
+import { PORTONES_ICON_GAP } from "../config";
 import type { MapCoordinates } from "../types";
+import { BOULEVARD_BOTTOM_Y, BOULEVARD_CENTER_X } from "./corridor-geometry";
 
-/** Marcador fijo en la calle principal (marrón) junto a la base del boulevard. */
+/** Marcador fijo entre la base del boulevard y el ícono de portones. */
 export const NAV_START_POINT: MapCoordinates = [
-  BOULEVARD.y + BOULEVARD.height,
-  BOULEVARD.x - BOULEVARD_SIDE_GAP / 2,
+  BOULEVARD_BOTTOM_Y + PORTONES_ICON_GAP,
+  BOULEVARD_CENTER_X,
 ];
 
 export const ROUTE_STROKE = "#c0392b";

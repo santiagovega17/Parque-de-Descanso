@@ -15,10 +15,59 @@ export function orthogonalizePath(points: MapCoordinates[]): MapCoordinates[] {
     const alignedY = Math.abs(prevY - targetY) < 1;
 
     if (!alignedX && !alignedY) {
-      result.push([prevY, targetX]);
+      const deltaX = Math.abs(targetX - prevX);
+      const deltaY = Math.abs(targetY - prevY);
+
+      if (deltaY >= deltaX) {
+        result.push([targetY, prevX]);
+      } else {
+        result.push([prevY, targetX]);
+      }
     }
 
     result.push(points[i]);
+  }
+
+  return result;
+}
+
+/**
+ * Elimina escalones en Z: un desvío horizontal o vertical breve entre dos
+ * tramos rectos colineales.
+ */
+export function removeSpuriousJogs(points: MapCoordinates[]): MapCoordinates[] {
+  let result = [...points];
+  let changed = true;
+
+  while (changed && result.length >= 3) {
+    changed = false;
+    const next: MapCoordinates[] = [result[0]];
+
+    for (let i = 1; i < result.length - 1; i += 1) {
+      const [py, px] = next[next.length - 1];
+      const [cy, cx] = result[i];
+      const [ny, nx] = result[i + 1];
+
+      const verticalJog =
+        Math.abs(px - nx) < 1 &&
+        Math.abs(px - cx) > 1 &&
+        (cy - py) * (ny - cy) > 0;
+
+      const horizontalJog =
+        Math.abs(py - ny) < 1 &&
+        Math.abs(py - cy) > 1 &&
+        (cx - px) * (nx - cx) > 0;
+
+      if (verticalJog || horizontalJog) {
+        changed = true;
+        continue;
+      }
+
+      next.push(result[i]);
+    }
+
+    next.push(result[result.length - 1]);
+    result = next;
   }
 
   return result;
