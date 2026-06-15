@@ -228,3 +228,26 @@ export function routeToPasillo(
 
   return finalizeRoute(points);
 }
+
+/** Rodea un sector por su pasillo sur y luego sube al destino (p. ej. estacionamiento). */
+export function routeToPasilloViaSouthCorridor(
+  centerY: number,
+  centerX: number,
+  spineX: number,
+  obstacleBlock: ParcelBlock,
+): MapCoordinates[] {
+  const southY = getBlockSouthCorridorY(obstacleBlock);
+  const points: MapCoordinates[] = [NAV_START_POINT];
+
+  routeAlongMainStreet(points, spineX, southY);
+
+  if (Math.abs(spineX - centerX) > 1) {
+    pushPoint(points, [southY, centerX]);
+  }
+
+  if (Math.abs(southY - centerY) > 1) {
+    pushPoint(points, [centerY, centerX]);
+  }
+
+  return finalizeRoute(points);
+}

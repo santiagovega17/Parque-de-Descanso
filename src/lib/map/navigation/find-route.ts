@@ -6,7 +6,7 @@ import {
   BOULEVARD_LEFT_SPINE_X,
   BOULEVARD_RIGHT_SPINE_X,
 } from "./corridor-geometry";
-import { routeToBlock, routeToParcel, routeToPasillo } from "./corridor-router";
+import { routeToBlock, routeToParcel, routeToPasillo, routeToPasilloViaSouthCorridor } from "./corridor-router";
 
 export { NAV_START_POINT } from "./config";
 
@@ -41,6 +41,22 @@ export function findRouteToPasillo(
   pasillo: PasilloIntersection,
 ): MapCoordinates[] | null {
   const spineX = getPasilloSpineX(pasillo.centerX);
+
+  if (pasillo.avoidThroughBlockId) {
+    const block = getBlockById(pasillo.avoidThroughBlockId);
+
+    if (block) {
+      const route = routeToPasilloViaSouthCorridor(
+        pasillo.centerY,
+        pasillo.centerX,
+        spineX,
+        block,
+      );
+
+      return route.length >= 2 ? route : null;
+    }
+  }
+
   const route = routeToPasillo(pasillo.centerY, pasillo.centerX, spineX);
 
   return route.length >= 2 ? route : null;

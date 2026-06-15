@@ -28,6 +28,10 @@ export type PasilloIntersection = {
   centerY: number;
   label?: string;
   iconSrc?: string;
+  /** Zoom del ícono dentro del rombo (por defecto PASILLO_DIAMOND_ICON_ZOOM). */
+  iconZoom?: number;
   /** Desplazamiento vertical del ícono (negativo = subir). */
   iconOffsetY?: number;
+  /** La ruta rodea por abajo de este sector en lugar de atravesarlo. */
+  avoidThroughBlockId?: string;
 };

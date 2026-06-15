@@ -7,7 +7,7 @@ export const MAP_RIGHT_ICON_ZONE = 360;
 export const MAP_IMAGE_WIDTH = MAP_CONTENT_WIDTH + MAP_RIGHT_ICON_ZONE;
 
 /** Altura del contenido principal (bloques, boulevard, etc.). */
-export const MAP_CONTENT_HEIGHT = 2320;
+export const MAP_CONTENT_HEIGHT = 2404;
 
 /** Espacio extra bajo el boulevard para el ícono de portones. */
 export const MAP_BOTTOM_ICON_ZONE = 380;

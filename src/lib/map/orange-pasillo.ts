@@ -31,17 +31,17 @@ function createPasilloBlock(
 ): ParcelBlock {
   return {
     id,
-    label: `Bloque ${index}`,
+    label: `Sector ${index}`,
     variant: "orange",
     origin: pasilloOrigin(row, col),
     pasilloInnerCorner,
   };
 }
 
-/** Bloques naranjas con intersección tipo pasillo. */
+/** Sectores naranjas con intersección tipo pasillo. */
 export const ORANGE_PASILLO_BLOCKS: ParcelBlock[] = [
-  createPasilloBlock("bloque-17", 17, 0, 0, "bottom-right"),
-  createPasilloBlock("bloque-18", 18, 0, 1, "bottom-left"),
-  createPasilloBlock("bloque-19", 19, 1, 0, "top-right"),
-  createPasilloBlock("bloque-20", 20, 1, 1, "top-left"),
+  createPasilloBlock("sector-17", 17, 0, 0, "bottom-right"),
+  createPasilloBlock("sector-18", 18, 0, 1, "bottom-left"),
+  createPasilloBlock("sector-19", 19, 1, 0, "top-right"),
+  createPasilloBlock("sector-20", 20, 1, 1, "top-left"),
 ];

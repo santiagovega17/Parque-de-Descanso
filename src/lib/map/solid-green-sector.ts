@@ -34,7 +34,7 @@ export const SOLID_GREEN_PIN = {
  */
 export const SOLID_GREEN_BLOCKS: ParcelBlock[] = [
   {
-    id: "bloque-verde-liso-izquierda",
+    id: "sector-verde-liso-izquierda",
     label: "Sector verde",
     variant: "greenDark",
     origin: solidOrigin(0, 0),
@@ -42,7 +42,7 @@ export const SOLID_GREEN_BLOCKS: ParcelBlock[] = [
     solidRoundabout: "left",
   },
   {
-    id: "bloque-verde-liso",
+    id: "sector-verde-liso",
     label: "Sector verde",
     variant: "greenDark",
     origin: solidOrigin(0, 1),
@@ -50,7 +50,7 @@ export const SOLID_GREEN_BLOCKS: ParcelBlock[] = [
     solidRoundabout: "right",
   },
   {
-    id: "bloque-verde-liso-escalon-1",
+    id: "sector-verde-liso-escalon-1",
     label: "Sector verde",
     variant: "greenDark",
     origin: solidOrigin(1, 0),
@@ -58,7 +58,7 @@ export const SOLID_GREEN_BLOCKS: ParcelBlock[] = [
     solidShape: "trapezoid-left-step",
   },
   {
-    id: "bloque-verde-liso-abajo",
+    id: "sector-verde-liso-abajo",
     label: "Sector verde",
     variant: "greenDark",
     origin: solidOrigin(1, 1),
@@ -66,7 +66,7 @@ export const SOLID_GREEN_BLOCKS: ParcelBlock[] = [
     pasilloInnerCorner: "bottom-right",
   },
   {
-    id: "bloque-verde-liso-escalon-2",
+    id: "sector-verde-liso-escalon-2",
     label: "Sector verde",
     variant: "greenDark",
     origin: solidOrigin(2, 0),
@@ -74,7 +74,7 @@ export const SOLID_GREEN_BLOCKS: ParcelBlock[] = [
     pasilloInnerCorner: "bottom-left",
   },
   {
-    id: "bloque-verde-liso-pasillo",
+    id: "sector-verde-liso-pasillo",
     label: "Sector verde",
     variant: "greenDark",
     origin: solidOrigin(2, 1),

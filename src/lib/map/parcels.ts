@@ -55,18 +55,18 @@ function createBlock(
   return { id, label, variant, origin, ...options };
 }
 
-/** Bloques de parcelas definidos en el plano. */
+/** Sectores de parcelas definidos en el plano. */
 export const PARCEL_BLOCKS: ParcelBlock[] = [
   ...SOLID_GREEN_BLOCKS,
   createBlock(
-    "bloque-28",
-    "Bloque 28",
+    "sector-28",
+    "Sector 28",
     "violet",
     gridOrigin(VIOLET_TOP_TIER_Y, LEFT_ORIGIN_X, 0, VIOLET_ABOVE_PINK_COL),
   ),
   ...createGridBlocks(
-    "bloque",
-    "Bloque",
+    "sector",
+    "Sector",
     "violet",
     VIOLET_TIER_Y,
     LEFT_ORIGIN_X,
@@ -75,8 +75,8 @@ export const PARCEL_BLOCKS: ParcelBlock[] = [
     21,
   ),
   ...createGridBlocks(
-    "bloque",
-    "Bloque",
+    "sector",
+    "Sector",
     "pink",
     PINK_TIER_Y,
     RIGHT_ORIGIN_X,
@@ -88,8 +88,8 @@ export const PARCEL_BLOCKS: ParcelBlock[] = [
   ...YELLOW_PASILLO_BLOCKS,
   ...ORANGE_PASILLO_BLOCKS,
   ...createGridBlocks(
-    "bloque",
-    "Bloque",
+    "sector",
+    "Sector",
     "green",
     GREEN_TIER_Y,
     LEFT_ORIGIN_X,
@@ -98,8 +98,8 @@ export const PARCEL_BLOCKS: ParcelBlock[] = [
     5,
   ),
   ...createGridBlocks(
-    "bloque",
-    "Bloque",
+    "sector",
+    "Sector",
     "blue",
     BLUE_TIER_Y,
     RIGHT_ORIGIN_X,
@@ -109,7 +109,7 @@ export const PARCEL_BLOCKS: ParcelBlock[] = [
   ),
 ];
 
-/** Todas las parcelas del plano, derivadas de los bloques definidos. */
+/** Todas las parcelas del plano, derivadas de los sectores definidos. */
 export const ALL_PARCELS: Parcel[] = PARCEL_BLOCKS.flatMap(createParcelBlock);
 
 const BLOCK_BY_ID = new Map(PARCEL_BLOCKS.map((block) => [block.id, block]));

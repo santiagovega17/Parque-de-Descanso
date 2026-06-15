@@ -11,6 +11,7 @@ import {
 } from "./parcel-config";
 import { applyBlockOutline, BLOCK_OUTLINE_STROKE } from "./block-outline";
 import { BOULEVARD } from "./layout";
+import { appendBoulevardTrees } from "./boulevard-trees";
 import { MAP_ICONS } from "./map-icons";
 import { appendPasilloClipPath, appendPasillos, getPasilloBlockPoints } from "./pasillo-svg";
 import {
@@ -47,6 +48,7 @@ function appendBoulevard(svg: SVGSVGElement) {
   boulevard.setAttribute("stroke", BOULEVARD.border);
   boulevard.setAttribute("stroke-width", "2");
   svg.appendChild(boulevard);
+  appendBoulevardTrees(svg);
 }
 
 function appendSolidGreenPin(svg: SVGSVGElement) {

@@ -70,7 +70,7 @@ function appendPasilloIcon(
   intersection: PasilloIntersection,
   points: string,
 ) {
-  const { id, centerX, centerY, iconSrc, iconOffsetY = 0 } = intersection;
+  const { id, centerX, centerY, iconSrc, iconOffsetY = 0, iconZoom } = intersection;
 
   if (!iconSrc) {
     return;
@@ -78,7 +78,7 @@ function appendPasilloIcon(
 
   const clipId = appendPasilloDiamondClipPath(svg, id, points);
   const diamondSize = PASILLO_DIAMOND_HALF * 2;
-  const iconSize = diamondSize * PASILLO_DIAMOND_ICON_ZOOM;
+  const iconSize = diamondSize * (iconZoom ?? PASILLO_DIAMOND_ICON_ZOOM);
   const iconOffset = iconSize / 2;
 
   const iconGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");

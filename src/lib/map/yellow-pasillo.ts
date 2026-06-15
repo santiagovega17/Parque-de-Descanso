@@ -33,33 +33,33 @@ function createPasilloBlock(
 ): ParcelBlock {
   return {
     id,
-    label: `Bloque ${index}`,
+    label: `Sector ${index}`,
     variant: "yellow",
     origin: pasilloOrigin(row, col),
     pasilloInnerCorner,
   };
 }
 
-/** Bloques amarillos centrales con intersección tipo pasillo (12, 13, 15, 16). */
+/** Sectores amarillos centrales con intersección tipo pasillo (12, 13, 15, 16). */
 export const YELLOW_PASILLO_BLOCKS: ParcelBlock[] = [
-  createPasilloBlock("bloque-12", 12, 0, 0, "bottom-right"),
-  createPasilloBlock("bloque-13", 13, 0, 1, "bottom-left"),
-  createPasilloBlock("bloque-15", 15, 1, 0, "top-right"),
-  createPasilloBlock("bloque-16", 16, 1, 1, "top-left"),
+  createPasilloBlock("sector-12", 12, 0, 0, "bottom-right"),
+  createPasilloBlock("sector-13", 13, 0, 1, "bottom-left"),
+  createPasilloBlock("sector-15", 15, 1, 0, "top-right"),
+  createPasilloBlock("sector-16", 16, 1, 1, "top-left"),
 ];
 
-/** Bloques amarillos laterales con pasillo hacia los bloques verdes lisos (11 y 14). */
+/** Sectores amarillos laterales con pasillo hacia los sectores verdes lisos (11 y 14). */
 export const YELLOW_SIDE_BLOCKS: ParcelBlock[] = [
   {
-    id: "bloque-11",
-    label: "Bloque 11",
+    id: "sector-11",
+    label: "Sector 11",
     variant: "yellow",
     origin: gridOrigin(YELLOW_TIER_Y, LEFT_ORIGIN_X, 0, 0),
     pasilloInnerCorner: "bottom-left",
   },
   {
-    id: "bloque-14",
-    label: "Bloque 14",
+    id: "sector-14",
+    label: "Sector 14",
     variant: "yellow",
     origin: gridOrigin(YELLOW_TIER_Y, LEFT_ORIGIN_X, 1, 0),
     pasilloInnerCorner: "top-left",
