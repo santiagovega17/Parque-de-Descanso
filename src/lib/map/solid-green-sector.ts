@@ -6,6 +6,7 @@ import {
   VIOLET_TIER_Y,
 } from "./layout";
 import { BLOCK_COLORS, BLOCK_HEIGHT, BLOCK_WIDTH } from "./parcel-config";
+import { getDiagonalStepTriangleOrigin } from "./solid-green-shapes";
 import {
   ROUNDABOUT_CENTER_Y,
   ROUNDABOUT_RADIUS,
@@ -17,6 +18,11 @@ function solidOrigin(row: number, col: number): [number, number] {
     VIOLET_TIER_Y + row * (BLOCK_HEIGHT + BLOCK_ROW_GAP),
     SOLID_LEFT_ORIGIN_X + col * SOLID_BLOCK_STRIDE,
   ];
+}
+
+/** Origen del bloque inferior con escalón diagonal (columna izquierda, fila 2). */
+function solidBottomStepOrigin(): [number, number] {
+  return solidOrigin(2, 0);
 }
 
 /** Isla verde central de la rotonda (coordenadas globales). */
@@ -31,6 +37,7 @@ export const SOLID_GREEN_PIN = {
  * Sector verde oscuro izquierdo según plano de referencia:
  * fila 0: dos cuadrados + pin
  * filas 1–2: escalones con recorte inferior izquierdo y pasillo inferior derecho
+ * fila 2: bloque inferior con diagonal alineada al escalón superior izquierdo
  */
 export const SOLID_GREEN_BLOCKS: ParcelBlock[] = [
   {
@@ -58,6 +65,14 @@ export const SOLID_GREEN_BLOCKS: ParcelBlock[] = [
     solidShape: "trapezoid-left-step",
   },
   {
+    id: "sector-verde-liso-escalon-triangulo",
+    label: "Sector verde",
+    variant: "greenDark",
+    origin: getDiagonalStepTriangleOrigin(),
+    solid: true,
+    solidShape: "diagonal-step-triangle",
+  },
+  {
     id: "sector-verde-liso-abajo",
     label: "Sector verde",
     variant: "greenDark",
@@ -66,19 +81,11 @@ export const SOLID_GREEN_BLOCKS: ParcelBlock[] = [
     pasilloInnerCorner: "bottom-right",
   },
   {
-    id: "sector-verde-liso-escalon-2",
-    label: "Sector verde",
-    variant: "greenDark",
-    origin: solidOrigin(2, 0),
-    solid: true,
-    pasilloInnerCorner: "bottom-left",
-  },
-  {
     id: "sector-verde-liso-pasillo",
     label: "Sector verde",
     variant: "greenDark",
-    origin: solidOrigin(2, 1),
+    origin: solidBottomStepOrigin(),
     solid: true,
-    pasilloInnerCorner: "top-right",
+    solidShape: "bottom-pasillo-step",
   },
 ];

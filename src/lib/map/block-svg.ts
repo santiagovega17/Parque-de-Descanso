@@ -18,7 +18,7 @@ import {
   appendRoundaboutBlockPath,
   appendRoundaboutIsland,
 } from "./solid-green-roundabout";
-import { appendTrapezoidLeftStepPath } from "./solid-green-shapes";
+import { appendTrapezoidLeftStepPath, appendBottomPasilloStepPath, appendDiagonalStepTrianglePath } from "./solid-green-shapes";
 import { getParcelNumber } from "./parcel-utils";
 import { appendWalkableAreas } from "./walkable-svg";
 import { appendRouteForegroundLayer, appendRouteLayer } from "./navigation/route-svg";
@@ -101,6 +101,18 @@ function appendBlock(svg: SVGSVGElement, block: ParcelBlock) {
 
   if (block.solid && block.solidShape === "trapezoid-left-step") {
     appendTrapezoidLeftStepPath(group, colors.background);
+    svg.appendChild(group);
+    return;
+  }
+
+  if (block.solid && block.solidShape === "bottom-pasillo-step") {
+    appendBottomPasilloStepPath(group, colors.background);
+    svg.appendChild(group);
+    return;
+  }
+
+  if (block.solid && block.solidShape === "diagonal-step-triangle") {
+    appendDiagonalStepTrianglePath(group, colors.background);
     svg.appendChild(group);
     return;
   }

@@ -29,7 +29,7 @@ export type ParcelBlock = {
   /** Recorte superior tipo rotonda (bloques verdes superiores). */
   solidRoundabout?: "left" | "right";
   /** Forma sólida personalizada (bloques verdes). */
-  solidShape?: "trapezoid-left-step";
+  solidShape?: "trapezoid-left-step" | "bottom-pasillo-step" | "diagonal-step-triangle";
 };
 
 export type Parcel = {
