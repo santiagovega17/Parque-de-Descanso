@@ -3,69 +3,82 @@ import {
   MAP_ABSOLUTE_MIN_ZOOM,
   MAP_BOUNDS,
   MAP_FIT_PADDING,
+  MAP_FIT_PADDING_BOTTOM,
+  MAP_FIT_PADDING_TOP,
+  MAP_FIT_PADDING_X,
   MAP_FIT_ZOOM_OFFSET,
+  MAP_HOME_BOUNDS,
 } from "./config";
 
 const boundsLatLng = L.latLngBounds(MAP_BOUNDS);
+const homeBoundsLatLng = L.latLngBounds(MAP_HOME_BOUNDS);
 
-/** Más margen en pantallas verticales o estrechas para que quepa todo el mapa. */
-function getFitPadding(map: L.Map): L.PointExpression {
+type HomeView = {
+  center: L.LatLng;
+  zoom: number;
+  minZoom: number;
+};
+
+/** Padding asimétrico: más margen abajo empuja el mapa hacia arriba. */
+function getHomeFitOptions(map: L.Map): L.FitBoundsOptions {
   const { x: width, y: height } = map.getSize();
-  let pad = MAP_FIT_PADDING;
+  let padX = MAP_FIT_PADDING_X;
+  let padTop = MAP_FIT_PADDING_TOP;
+  let padBottom = MAP_FIT_PADDING_BOTTOM;
 
   if (height > width) {
-    pad = Math.max(pad, Math.round(width * 0.34), Math.round(height * 0.14));
+    padX = Math.max(padX, Math.round(width * 0.34));
+    padTop = Math.max(padTop, Math.round(height * 0.08));
+    padBottom = Math.max(padBottom, Math.round(height * 0.22));
   }
 
-  return [pad, pad];
-}
-
-function applyFitZoomOffset(map: L.Map, animate = false): void {
-  if (MAP_FIT_ZOOM_OFFSET === 0) return;
-  map.setZoom(map.getZoom() + MAP_FIT_ZOOM_OFFSET, { animate });
-}
-
-function getFitBoundsOptions(map: L.Map, animate = false): L.FitBoundsOptions {
   return {
-    padding: getFitPadding(map),
-    animate,
+    paddingTopLeft: L.point(padX, padTop),
+    paddingBottomRight: L.point(padX, padBottom),
+    animate: false,
   };
 }
 
-/** Zoom con el mapa completo encuadrado (sin el offset de vista preferida). */
-function measurePaddedFitZoom(map: L.Map, animate = false): number {
-  map.invalidateSize({ animate: false });
-  map.setMinZoom(MAP_ABSOLUTE_MIN_ZOOM);
-  map.fitBounds(boundsLatLng, getFitBoundsOptions(map, animate));
-  return map.getZoom();
-}
-
-/**
- * Zoom de vista inicial (encuadre + offset).
- * Mide sin el tope de minZoom del contenedor; si es -1, el padding no tiene efecto.
- */
-function measureFitView(map: L.Map, animate = false): number {
-  measurePaddedFitZoom(map, animate);
-  applyFitZoomOffset(map, animate);
-  return map.getZoom();
-}
-
-/** Zoom mínimo permitido (más alejado que la vista inicial). */
-export function getMapMinZoom(map: L.Map): number {
+/** Calcula la vista home de forma síncrona (sin animaciones intermedias). */
+function computeHomeView(map: L.Map): HomeView {
   const center = map.getCenter();
   const zoom = map.getZoom();
-  const minZoom = measurePaddedFitZoom(map, false);
+
+  map.invalidateSize({ animate: false });
+  map.setMinZoom(MAP_ABSOLUTE_MIN_ZOOM);
+  map.fitBounds(homeBoundsLatLng, getHomeFitOptions(map));
+
+  const minZoom = map.getZoom();
+  const homeCenter = map.getCenter();
+  const homeZoom = minZoom + MAP_FIT_ZOOM_OFFSET;
+
+  map.setView(center, zoom, { animate: false });
+
+  return { center: homeCenter, zoom: homeZoom, minZoom };
+}
+
+/** Zoom con el mapa completo encuadrado (sin el offset de vista preferida). */
+function measurePaddedFitZoom(map: L.Map): number {
+  const center = map.getCenter();
+  const zoom = map.getZoom();
+
+  map.invalidateSize({ animate: false });
+  map.setMinZoom(MAP_ABSOLUTE_MIN_ZOOM);
+  map.fitBounds(homeBoundsLatLng, getHomeFitOptions(map));
+  const minZoom = map.getZoom();
+
   map.setView(center, zoom, { animate: false });
   return minZoom;
 }
 
+/** Zoom mínimo permitido (más alejado que la vista inicial). */
+export function getMapMinZoom(map: L.Map): number {
+  return measurePaddedFitZoom(map);
+}
+
 /** Zoom de la vista inicial preferida. */
 export function getMapFitZoom(map: L.Map): number {
-  const center = map.getCenter();
-  const zoom = map.getZoom();
-  const fitZoom = measureFitView(map, false);
-  map.setView(center, zoom, { animate: false });
-  return fitZoom;
+  return computeHomeView(map).zoom;
 }
 
 /** Aplica límites de pan; el zoom mínimo permite alejar más allá de la vista inicial. */
@@ -74,13 +87,10 @@ export function applyMapViewLimits(map: L.Map): void {
   map.setMaxBounds(boundsLatLng);
 }
 
-/** Centra el mapa en la vista inicial preferida (botón "Ver mapa completo"). */
+/** Restaura la vista home fija (carga inicial y botón ⌂). */
 export function fitFullMap(map: L.Map, animate = true): void {
-  map.invalidateSize({ animate: false });
-  map.setMinZoom(MAP_ABSOLUTE_MIN_ZOOM);
-  map.fitBounds(boundsLatLng, getFitBoundsOptions(map, animate));
-  const minZoom = map.getZoom();
-  applyFitZoomOffset(map, animate);
+  const { center, zoom, minZoom } = computeHomeView(map);
+  map.setView(center, zoom, { animate });
   map.setMinZoom(minZoom);
   map.setMaxBounds(boundsLatLng);
 }

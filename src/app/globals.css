@@ -2,7 +2,7 @@
 @import "leaflet/dist/leaflet.css";
 
 :root {
-  --background: #f4f7f2;
+  --background: #d9c4a0;
   --foreground: #1f3d2b;
 }
 
@@ -17,18 +17,18 @@ html,
 body {
   height: 100%;
   overscroll-behavior: none;
+  background: var(--background);
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
-.touch-map .leaflet-container {
+.leaflet-container.touch-map {
   height: 100%;
   width: 100%;
-  background: #e8efe3;
+  background: var(--background);
   font-family: inherit;
   touch-action: none;
 }

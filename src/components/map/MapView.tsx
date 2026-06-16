@@ -10,7 +10,7 @@ const InteractiveMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex h-full w-full items-center justify-center bg-emerald-50 text-lg text-emerald-800">
+      <div className="flex h-full w-full items-center justify-center bg-background text-lg text-foreground">
         Cargando mapa...
       </div>
     ),
@@ -20,7 +20,7 @@ const InteractiveMap = dynamic(
 export function MapView() {
   return (
     <MapSelectionProvider>
-      <div className="relative h-full w-full overflow-hidden bg-emerald-50">
+      <div className="relative h-full w-full overflow-hidden bg-background">
         <InteractiveMap />
         <ParcelSelectionPanel />
       </div>

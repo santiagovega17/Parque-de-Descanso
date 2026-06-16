@@ -23,14 +23,27 @@ export const MAP_BOUNDS: [[number, number], [number, number]] = [
   [MAP_IMAGE_HEIGHT, MAP_IMAGE_WIDTH],
 ];
 
+/** Encuadre home: contenido principal sin el margen inferior de iconos. */
+export const MAP_HOME_BOUNDS: [[number, number], [number, number]] = [
+  [0, 0],
+  [MAP_CONTENT_HEIGHT, MAP_IMAGE_WIDTH],
+];
+
 export const MAP_DEFAULT_ZOOM = -1;
 export const MAP_MAX_ZOOM = 2;
 
 /** Piso de zoom para medir el encuadre (debe ser menor que el zoom real de ajuste). */
 export const MAP_ABSOLUTE_MIN_ZOOM = -4;
 
-/** Margen base en px al encuadrar el mapa completo (aleja un poco el zoom base). */
-export const MAP_FIT_PADDING = 140;
+/** Margen horizontal al encuadrar el mapa (px). */
+export const MAP_FIT_PADDING_X = 140;
 
-/** +2.5 respecto al encuadre con padding (equivale a 5 pulsaciones de + con zoomDelta 0.5). */
-export const MAP_FIT_ZOOM_OFFSET: number = 1.75;
+/** Margen vertical: menos arriba y más abajo eleva el contenido en pantalla. */
+export const MAP_FIT_PADDING_TOP = 60;
+export const MAP_FIT_PADDING_BOTTOM = 260;
+
+/** Margen base en pantallas verticales (fallback para el cálculo responsivo). */
+export const MAP_FIT_PADDING = MAP_FIT_PADDING_X;
+
+/** Zoom extra sobre el encuadre base (3 clics en − desde la vista anterior). */
+export const MAP_FIT_ZOOM_OFFSET: number = 0.25;
