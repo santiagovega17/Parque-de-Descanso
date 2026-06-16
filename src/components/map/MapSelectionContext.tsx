@@ -10,12 +10,13 @@ import {
 } from "react";
 import type { PasilloIntersection } from "@/lib/map/pasillo-config";
 import { getPasilloById } from "@/lib/map/pasillos";
-import { getParcelById, getParcelLabel } from "@/lib/map/parcels";
+import { getParcelById, getParcelLabel, getSectorName } from "@/lib/map/parcels";
 import type { Parcel } from "@/lib/map/types";
 
 type MapSelectionContextValue = {
   selectedParcel: Parcel | null;
   selectedParcelLabel: string | null;
+  selectedSectorName: string | null;
   selectedPasillo: PasilloIntersection | null;
   selectedPasilloLabel: string | null;
   selectParcel: (parcelId: string) => void;
@@ -44,6 +45,11 @@ export function MapSelectionProvider({ children }: { children: ReactNode }) {
     [selectedParcel],
   );
 
+  const selectedSectorName = useMemo(
+    () => (selectedParcel ? getSectorName(selectedParcel) : null),
+    [selectedParcel],
+  );
+
   const selectedPasilloLabel = useMemo(
     () => selectedPasillo?.label ?? null,
     [selectedPasillo],
@@ -68,6 +74,7 @@ export function MapSelectionProvider({ children }: { children: ReactNode }) {
     () => ({
       selectedParcel,
       selectedParcelLabel,
+      selectedSectorName,
       selectedPasillo,
       selectedPasilloLabel,
       selectParcel,
@@ -77,6 +84,7 @@ export function MapSelectionProvider({ children }: { children: ReactNode }) {
     [
       selectedParcel,
       selectedParcelLabel,
+      selectedSectorName,
       selectedPasillo,
       selectedPasilloLabel,
       selectParcel,

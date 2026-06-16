@@ -54,3 +54,15 @@ export const BLOCK_COLORS: Record<
     parcel: "#c8b8f0",
   },
 };
+
+/** Nombre temático de cada sector según su color. */
+export const SECTOR_NAMES_BY_VARIANT: Partial<
+  Record<ParcelBlockVariant, string>
+> = {
+  pink: "Sector Rosas",
+  yellow: "Sector Girasoles",
+  green: "Sector Jazmines",
+  blue: "Sector Lavandas",
+  violet: "Sector Lirios",
+  orange: "Sector Tulipanes",
+};

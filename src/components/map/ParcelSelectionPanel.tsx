@@ -6,6 +6,7 @@ export function ParcelSelectionPanel() {
   const {
     selectedParcel,
     selectedParcelLabel,
+    selectedSectorName,
     selectedPasillo,
     selectedPasilloLabel,
     clearSelection,
@@ -28,8 +29,13 @@ export function ParcelSelectionPanel() {
                 Parcela seleccionada
               </p>
               <p className="truncate text-lg font-semibold text-emerald-950">
-                {selectedParcelLabel}
+                {selectedSectorName ?? selectedParcelLabel}
               </p>
+              {selectedSectorName ? (
+                <p className="mt-0.5 truncate text-sm text-emerald-800/80">
+                  {selectedParcelLabel}
+                </p>
+              ) : null}
               <p className="mt-1 text-sm text-emerald-800/80">
                 Camino desde la entrada hasta la parcela
               </p>

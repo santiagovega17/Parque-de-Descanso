@@ -14,6 +14,7 @@ import {
 import { ORANGE_PASILLO_BLOCKS } from "./orange-pasillo";
 import { SOLID_GREEN_BLOCKS } from "./solid-green-sector";
 import { YELLOW_PASILLO_BLOCKS, YELLOW_SIDE_BLOCKS } from "./yellow-pasillo";
+import { SECTOR_NAMES_BY_VARIANT } from "./parcel-config";
 import { createParcelBlock } from "./parcel-utils";
 import type { Parcel, ParcelBlock, ParcelBlockVariant } from "./types";
 
@@ -122,6 +123,12 @@ export function getParcelById(id: string): Parcel | undefined {
 
 export function getBlockById(id: string): ParcelBlock | undefined {
   return BLOCK_BY_ID.get(id);
+}
+
+export function getSectorName(parcel: Parcel): string | null {
+  const block = BLOCK_BY_ID.get(parcel.blockId);
+  if (!block) return null;
+  return SECTOR_NAMES_BY_VARIANT[block.variant] ?? null;
 }
 
 export function getParcelLabel(parcel: Parcel): string {
