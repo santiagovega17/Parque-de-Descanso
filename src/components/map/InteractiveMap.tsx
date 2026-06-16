@@ -7,6 +7,7 @@ import {
   MAP_BOUNDS,
   MAP_DEFAULT_ZOOM,
   MAP_MAX_ZOOM,
+  MAP_ZOOM_DELTA,
 } from "@/lib/map/config";
 import { fitFullMap } from "@/lib/map/map-limits";
 import { MapControls } from "./MapControls";
@@ -50,7 +51,7 @@ export function InteractiveMap() {
       maxBounds={MAP_BOUNDS}
       maxBoundsViscosity={1}
       zoomSnap={0.25}
-      zoomDelta={0.5}
+      zoomDelta={MAP_ZOOM_DELTA}
       attributionControl={false}
       zoomControl={false}
       doubleClickZoom={false}

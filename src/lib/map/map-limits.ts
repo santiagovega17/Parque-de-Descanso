@@ -2,12 +2,15 @@ import L from "leaflet";
 import {
   MAP_ABSOLUTE_MIN_ZOOM,
   MAP_BOUNDS,
-  MAP_FIT_PADDING,
   MAP_FIT_PADDING_BOTTOM,
   MAP_FIT_PADDING_TOP,
   MAP_FIT_PADDING_X,
   MAP_FIT_ZOOM_OFFSET,
   MAP_HOME_BOUNDS,
+  MAP_TABLET_HOME_ZOOM_IN_STEPS,
+  MAP_TABLET_MAX_WIDTH,
+  MAP_TABLET_MIN_WIDTH,
+  MAP_ZOOM_DELTA,
 } from "./config";
 
 const boundsLatLng = L.latLngBounds(MAP_BOUNDS);
@@ -39,10 +42,26 @@ function getHomeFitOptions(map: L.Map): L.FitBoundsOptions {
   };
 }
 
+function isTabletViewport(width: number): boolean {
+  return width >= MAP_TABLET_MIN_WIDTH && width < MAP_TABLET_MAX_WIDTH;
+}
+
+/** Offset de zoom home según el dispositivo. */
+function getHomeZoomOffset(width: number): number {
+  if (isTabletViewport(width)) {
+    return (
+      MAP_FIT_ZOOM_OFFSET + MAP_TABLET_HOME_ZOOM_IN_STEPS * MAP_ZOOM_DELTA
+    );
+  }
+
+  return MAP_FIT_ZOOM_OFFSET;
+}
+
 /** Calcula la vista home de forma síncrona (sin animaciones intermedias). */
 function computeHomeView(map: L.Map): HomeView {
   const center = map.getCenter();
   const zoom = map.getZoom();
+  const { x: width } = map.getSize();
 
   map.invalidateSize({ animate: false });
   map.setMinZoom(MAP_ABSOLUTE_MIN_ZOOM);
@@ -50,7 +69,7 @@ function computeHomeView(map: L.Map): HomeView {
 
   const minZoom = map.getZoom();
   const homeCenter = map.getCenter();
-  const homeZoom = minZoom + MAP_FIT_ZOOM_OFFSET;
+  const homeZoom = minZoom + getHomeZoomOffset(width);
 
   map.setView(center, zoom, { animate: false });
 

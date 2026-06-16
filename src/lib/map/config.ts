@@ -47,3 +47,13 @@ export const MAP_FIT_PADDING = MAP_FIT_PADDING_X;
 
 /** Zoom extra sobre el encuadre base (3 clics en − desde la vista anterior). */
 export const MAP_FIT_ZOOM_OFFSET: number = 0.25;
+
+/** Incremento del botón +/− del mapa (debe coincidir con zoomDelta de Leaflet). */
+export const MAP_ZOOM_DELTA = 0.5;
+
+/** Ancho del contenedor considerado tablet (px). */
+export const MAP_TABLET_MIN_WIDTH = 768;
+export const MAP_TABLET_MAX_WIDTH = 1280;
+
+/** En tablet, la vista home equivale a MAP_FIT_ZOOM_OFFSET + N clics en +. */
+export const MAP_TABLET_HOME_ZOOM_IN_STEPS = 3;
