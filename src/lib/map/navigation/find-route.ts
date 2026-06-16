@@ -10,7 +10,18 @@ import { routeToBlock, routeToParcel, routeToPasillo, routeToPasilloViaSouthCorr
 
 export { NAV_START_POINT } from "./config";
 
-function getPasilloSpineX(centerX: number): number {
+function getPasilloSpineX(
+  centerX: number,
+  spineSide?: "left" | "right",
+): number {
+  if (spineSide === "left") {
+    return BOULEVARD_LEFT_SPINE_X;
+  }
+
+  if (spineSide === "right") {
+    return BOULEVARD_RIGHT_SPINE_X;
+  }
+
   return centerX < BOULEVARD_CENTER_X
     ? BOULEVARD_LEFT_SPINE_X
     : BOULEVARD_RIGHT_SPINE_X;
@@ -40,7 +51,7 @@ export function findRouteToParcel(parcel: Parcel): MapCoordinates[] | null {
 export function findRouteToPasillo(
   pasillo: PasilloIntersection,
 ): MapCoordinates[] | null {
-  const spineX = getPasilloSpineX(pasillo.centerX);
+  const spineX = getPasilloSpineX(pasillo.centerX, pasillo.boulevardSpineSide);
 
   if (pasillo.avoidThroughBlockId) {
     const block = getBlockById(pasillo.avoidThroughBlockId);

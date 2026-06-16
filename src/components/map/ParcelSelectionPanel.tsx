@@ -1,8 +1,10 @@
 "use client";
 
+import { useHelpRequest } from "./HelpRequestContext";
 import { useMapSelection } from "./MapSelectionContext";
 
 export function ParcelSelectionPanel() {
+  const { helpActive } = useHelpRequest();
   const {
     selectedParcel,
     selectedParcelLabel,
@@ -15,7 +17,7 @@ export function ParcelSelectionPanel() {
   const hasParcelSelection = selectedParcel && selectedParcelLabel;
   const hasPasilloSelection = selectedPasillo && selectedPasilloLabel;
 
-  if (!hasParcelSelection && !hasPasilloSelection) {
+  if (helpActive || (!hasParcelSelection && !hasPasilloSelection)) {
     return null;
   }
 

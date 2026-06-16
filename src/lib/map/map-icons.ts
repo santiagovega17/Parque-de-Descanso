@@ -53,6 +53,7 @@ export const AUTO_DESTINATION: PasilloIntersection = {
   iconZoom: 0.85,
   iconOffsetY: -7,
   avoidThroughBlockId: "sector-28",
+  boulevardSpineSide: "right",
 };
 
 /** Destino tipo rombo: salas velatorias. */

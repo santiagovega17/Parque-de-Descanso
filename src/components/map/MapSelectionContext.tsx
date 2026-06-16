@@ -12,6 +12,7 @@ import type { PasilloIntersection } from "@/lib/map/pasillo-config";
 import { getPasilloById } from "@/lib/map/pasillos";
 import { getParcelById, getParcelLabel, getSectorName } from "@/lib/map/parcels";
 import type { Parcel } from "@/lib/map/types";
+import { useHelpRequest } from "./HelpRequestContext";
 
 type MapSelectionContextValue = {
   selectedParcel: Parcel | null;
@@ -27,6 +28,7 @@ type MapSelectionContextValue = {
 const MapSelectionContext = createContext<MapSelectionContextValue | null>(null);
 
 export function MapSelectionProvider({ children }: { children: ReactNode }) {
+  const { closeHelp } = useHelpRequest();
   const [selectedParcelId, setSelectedParcelId] = useState<string | null>(null);
   const [selectedPasilloId, setSelectedPasilloId] = useState<string | null>(null);
 
@@ -55,15 +57,23 @@ export function MapSelectionProvider({ children }: { children: ReactNode }) {
     [selectedPasillo],
   );
 
-  const selectParcel = useCallback((parcelId: string) => {
-    setSelectedParcelId(parcelId);
-    setSelectedPasilloId(null);
-  }, []);
+  const selectParcel = useCallback(
+    (parcelId: string) => {
+      closeHelp();
+      setSelectedParcelId(parcelId);
+      setSelectedPasilloId(null);
+    },
+    [closeHelp],
+  );
 
-  const selectPasillo = useCallback((pasilloId: string) => {
-    setSelectedPasilloId(pasilloId);
-    setSelectedParcelId(null);
-  }, []);
+  const selectPasillo = useCallback(
+    (pasilloId: string) => {
+      closeHelp();
+      setSelectedPasilloId(pasilloId);
+      setSelectedParcelId(null);
+    },
+    [closeHelp],
+  );
 
   const clearSelection = useCallback(() => {
     setSelectedParcelId(null);

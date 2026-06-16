@@ -1,6 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { HelpRequestPanel } from "./HelpRequestPanel";
+import { HelpRequestProvider } from "./HelpRequestContext";
 import { MapSelectionProvider } from "./MapSelectionContext";
 import { ParcelSelectionPanel } from "./ParcelSelectionPanel";
 
@@ -19,11 +21,14 @@ const InteractiveMap = dynamic(
 
 export function MapView() {
   return (
-    <MapSelectionProvider>
-      <div className="relative h-full w-full overflow-hidden bg-background">
-        <InteractiveMap />
-        <ParcelSelectionPanel />
-      </div>
-    </MapSelectionProvider>
+    <HelpRequestProvider>
+      <MapSelectionProvider>
+        <div className="relative h-full w-full overflow-hidden bg-background">
+          <InteractiveMap />
+          <ParcelSelectionPanel />
+          <HelpRequestPanel />
+        </div>
+      </MapSelectionProvider>
+    </HelpRequestProvider>
   );
 }

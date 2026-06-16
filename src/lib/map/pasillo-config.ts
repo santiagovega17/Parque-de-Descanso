@@ -34,4 +34,6 @@ export type PasilloIntersection = {
   iconOffsetY?: number;
   /** La ruta rodea por abajo de este sector en lugar de atravesarlo. */
   avoidThroughBlockId?: string;
+  /** Lado del boulevard por el que sube la ruta (por defecto según la posición del destino). */
+  boulevardSpineSide?: "left" | "right";
 };
