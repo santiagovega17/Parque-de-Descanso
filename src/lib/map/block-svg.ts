@@ -21,7 +21,7 @@ import {
 import { appendTrapezoidLeftStepPath, appendBottomPasilloStepPath, appendDiagonalStepTrianglePath } from "./solid-green-shapes";
 import { getParcelNumber } from "./parcel-utils";
 import { appendWalkableAreas } from "./walkable-svg";
-import { appendRouteForegroundLayer, appendRouteLayer } from "./navigation/route-svg";
+import { appendRouteForegroundLayer, appendRouteLayer, appendRouteStartMarker } from "./navigation/route-svg";
 import { WALKABLE_MARGIN_FILL } from "./walkable-config";
 import type { ParcelBlock, PasilloInnerCorner } from "./types";
 
@@ -180,6 +180,7 @@ export function buildMapSvg(blocks: ParcelBlock[]): SVGSVGElement {
   appendRouteForegroundLayer(svg);
   appendSolidGreenPin(svg);
   appendMapIcons(svg);
+  appendRouteStartMarker(svg);
 
   return svg;
 }

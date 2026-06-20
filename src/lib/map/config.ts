@@ -10,7 +10,7 @@ export const MAP_IMAGE_WIDTH = MAP_CONTENT_WIDTH + MAP_RIGHT_ICON_ZONE;
 export const MAP_CONTENT_HEIGHT = 2404;
 
 /** Espacio extra bajo el boulevard para el ícono de portones. */
-export const MAP_BOTTOM_ICON_ZONE = 380;
+export const MAP_BOTTOM_ICON_ZONE = 632;
 
 /** Separación entre la base del boulevard y el ícono de portones. */
 export const PORTONES_ICON_GAP = 24;

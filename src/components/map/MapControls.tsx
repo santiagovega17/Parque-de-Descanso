@@ -1,5 +1,6 @@
 "use client";
 
+import { Bell, Home, Minus, Plus } from "lucide-react";
 import { useMap } from "react-leaflet";
 import { fitFullMap } from "@/lib/map/map-limits";
 import { useHelpRequest } from "./HelpRequestContext";
@@ -34,23 +35,7 @@ function ControlButton({
   );
 }
 
-function BellIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className="h-8 w-8"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-    </svg>
-  );
-}
+const controlIconClass = "h-8 w-8";
 
 export function MapControls() {
   const map = useMap();
@@ -73,19 +58,19 @@ export function MapControls() {
             helpActive ? "ring-2 ring-red-300" : ""
           }`}
         >
-          <BellIcon />
+          <Bell aria-hidden="true" className={controlIconClass} />
         </ControlButton>
         <ControlButton label="Acercar" onClick={() => map.zoomIn()}>
-          +
+          <Plus aria-hidden="true" className={controlIconClass} />
         </ControlButton>
         <ControlButton label="Alejar" onClick={() => map.zoomOut()}>
-          −
+          <Minus aria-hidden="true" className={controlIconClass} />
         </ControlButton>
         <ControlButton
           label="Ver mapa completo"
           onClick={() => fitFullMap(map, true)}
         >
-          ⌂
+          <Home aria-hidden="true" className={controlIconClass} />
         </ControlButton>
       </div>
     </div>

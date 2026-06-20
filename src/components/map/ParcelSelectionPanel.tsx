@@ -1,5 +1,16 @@
 "use client";
 
+import { useMemo } from "react";
+import { getBlockById } from "@/lib/map/parcels";
+import { getSectorFlowerIcon } from "@/lib/map/sector-flowers";
+import {
+  MapPanelCard,
+  MapPanelIconSlot,
+  MapPanelText,
+  isCenteredDestinationPasillo,
+  selectionPanelDestinationSizers,
+  selectionPanelParcelSizers,
+} from "./MapPanelCard";
 import { useHelpRequest } from "./HelpRequestContext";
 import { useMapSelection } from "./MapSelectionContext";
 
@@ -17,53 +28,66 @@ export function ParcelSelectionPanel() {
   const hasParcelSelection = selectedParcel && selectedParcelLabel;
   const hasPasilloSelection = selectedPasillo && selectedPasilloLabel;
 
+  const flowerIcon = useMemo(() => {
+    if (!selectedParcel) {
+      return null;
+    }
+
+    const block = getBlockById(selectedParcel.blockId);
+    return block ? getSectorFlowerIcon(block.variant) : null;
+  }, [selectedParcel]);
+
   if (helpActive || (!hasParcelSelection && !hasPasilloSelection)) {
     return null;
   }
 
+  const isDestinationPanel =
+    !!selectedPasillo && isCenteredDestinationPasillo(selectedPasillo.id);
+
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-6 z-[1000] flex justify-center px-4">
-      <div className="pointer-events-auto flex max-w-md items-center gap-4 rounded-2xl border border-emerald-900/10 bg-white/95 px-5 py-4 shadow-lg backdrop-blur-sm">
-        <div className="min-w-0 flex-1">
-          {hasParcelSelection ? (
-            <>
-              <p className="text-xs font-medium uppercase tracking-wide text-emerald-700/70">
-                Parcela seleccionada
-              </p>
-              <p className="truncate text-lg font-semibold text-emerald-950">
-                {selectedSectorName ?? selectedParcelLabel}
-              </p>
-              {selectedSectorName ? (
-                <p className="mt-0.5 truncate text-sm text-emerald-800/80">
-                  {selectedParcelLabel}
-                </p>
+    <div className="pointer-events-none absolute inset-x-0 top-6 z-[1000] flex justify-center px-4">
+      <MapPanelCard
+        compact={isDestinationPanel}
+        onClose={clearSelection}
+        sizers={
+          hasParcelSelection
+            ? selectionPanelParcelSizers()
+            : selectionPanelDestinationSizers()
+        }
+      >
+        {hasParcelSelection ? (
+          <div className="flex items-center gap-3">
+            <MapPanelIconSlot>
+              {flowerIcon ? (
+                <img
+                  src={flowerIcon}
+                  alt=""
+                  aria-hidden="true"
+                  className="h-11 w-11 object-contain"
+                />
               ) : null}
-              <p className="mt-1 text-sm text-emerald-800/80">
-                Camino desde la entrada hasta la parcela
-              </p>
-            </>
-          ) : (
-            <>
-              <p className="text-xs font-medium uppercase tracking-wide text-emerald-700/70">
-                Destino seleccionado
-              </p>
-              <p className="truncate text-lg font-semibold text-emerald-950">
-                {selectedPasilloLabel}
-              </p>
-              <p className="mt-1 text-sm text-emerald-800/80">
-                Camino desde la entrada hasta {selectedPasilloLabel?.toLowerCase()}
-              </p>
-            </>
-          )}
-        </div>
-        <button
-          type="button"
-          className="map-control-btn shrink-0 rounded-xl border border-emerald-900/10 px-3 py-2 text-sm font-medium text-emerald-900 transition hover:bg-emerald-50"
-          onClick={clearSelection}
-        >
-          Cerrar
-        </button>
-      </div>
+            </MapPanelIconSlot>
+            <MapPanelText
+              title={selectedSectorName ?? selectedParcelLabel}
+              subtitle={
+                selectedSectorName ? `Parcela ${selectedParcel.number}` : undefined
+              }
+            />
+          </div>
+        ) : (
+          <div
+            className={`flex w-full items-center ${
+              isDestinationPanel ? "justify-center" : "gap-3"
+            }`}
+          >
+            {isDestinationPanel ? null : <MapPanelIconSlot />}
+            <MapPanelText
+              title={selectedPasilloLabel ?? ""}
+              centered={isDestinationPanel}
+            />
+          </div>
+        )}
+      </MapPanelCard>
     </div>
   );
 }

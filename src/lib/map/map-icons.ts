@@ -22,8 +22,8 @@ export type MapIcon = {
   height: number;
 };
 
-const PORTONES_ICON_WIDTH = 400;
-const PORTONES_ICON_HEIGHT = 304;
+const PORTONES_ICON_WIDTH = 800;
+const PORTONES_ICON_HEIGHT = 608;
 const SALAS_ICON_GAP = 32;
 
 const BOULEVARD_CENTER_X = BOULEVARD.x + BOULEVARD.width / 2;
@@ -50,7 +50,7 @@ export const AUTO_DESTINATION: PasilloIntersection = {
   centerY: AUTO_ICON_CENTER_Y,
   label: "Estacionamiento",
   iconSrc: "/icons/auto.svg",
-  iconZoom: 0.85,
+  iconZoom: 1.19,
   iconOffsetY: -7,
   avoidThroughBlockId: "sector-28",
   boulevardSpineSide: "right",
@@ -63,6 +63,7 @@ export const SALAS_VELATORIAS_DESTINATION: PasilloIntersection = {
   centerY: ORANGE_PASILLO_INTERSECTION.centerY,
   label: "Salas velatorias",
   iconSrc: "/icons/salas velatorias.svg",
+  iconZoom: 1.44,
   iconOffsetY: -5,
 };
 

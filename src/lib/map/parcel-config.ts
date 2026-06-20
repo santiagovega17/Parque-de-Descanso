@@ -34,8 +34,8 @@ export const BLOCK_COLORS: Record<
     parcel: "#b8e8c0",
   },
   greenDark: {
-    background: "#2a5c3a",
-    parcel: "#2a5c3a",
+    background: "#5c5c5c",
+    parcel: "#5c5c5c",
   },
   yellow: {
     background: "#c4a832",

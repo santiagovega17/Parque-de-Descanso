@@ -12,6 +12,7 @@ export const ORANGE_PASILLO_INTERSECTION: PasilloIntersection = {
   centerY: ORANGE_PASILLO_ORIGIN_Y + BLOCK_HEIGHT + PASILLO_ROW_GAP / 2,
   label: "Iglesia",
   iconSrc: "/icons/iglesia.svg",
+  iconZoom: 1.44,
   iconOffsetY: -10,
 };
 

@@ -14,6 +14,7 @@ export const YELLOW_PASILLO_INTERSECTION: PasilloIntersection = {
   centerY: YELLOW_PASILLO_ORIGIN_Y + BLOCK_HEIGHT + PASILLO_ROW_GAP / 2,
   label: "Administración",
   iconSrc: "/icons/administracion.svg",
+  iconZoom: 1.44,
   iconOffsetY: -15,
 };
 

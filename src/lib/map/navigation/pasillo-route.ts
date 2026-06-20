@@ -468,16 +468,17 @@ export function isAnyPasilloVertex(point: MapCoordinates): boolean {
   );
 }
 
+export type RouteSegment = {
+  layer: "background" | "foreground";
+  points: MapCoordinates[];
+};
+
 /** Separa tramos sobre el borde del rombo (adelante) del resto (atrás). */
-export function splitRouteLayers(route: MapCoordinates[]): {
-  background: MapCoordinates[][];
-  foreground: MapCoordinates[][];
-} {
-  const background: MapCoordinates[][] = [];
-  const foreground: MapCoordinates[][] = [];
+export function splitRouteLayers(route: MapCoordinates[]): RouteSegment[] {
+  const segments: RouteSegment[] = [];
 
   if (route.length < 2) {
-    return { background: route.length ? [route] : [], foreground: [] };
+    return segments;
   }
 
   let backgroundChunk: MapCoordinates[] = [];
@@ -494,7 +495,7 @@ export function splitRouteLayers(route: MapCoordinates[]): {
       backgroundChunk.push(point);
 
       if (backgroundChunk.length >= 2) {
-        background.push(backgroundChunk);
+        segments.push({ layer: "background", points: backgroundChunk });
       }
 
       backgroundChunk = [];
@@ -508,7 +509,7 @@ export function splitRouteLayers(route: MapCoordinates[]): {
     }
 
     if (foregroundChunk.length >= 2) {
-      foreground.push(foregroundChunk);
+      segments.push({ layer: "foreground", points: foregroundChunk });
       backgroundChunk = [foregroundChunk[foregroundChunk.length - 1]];
     } else {
       backgroundChunk = [point];
@@ -516,8 +517,8 @@ export function splitRouteLayers(route: MapCoordinates[]): {
   }
 
   if (backgroundChunk.length >= 2) {
-    background.push(backgroundChunk);
+    segments.push({ layer: "background", points: backgroundChunk });
   }
 
-  return { background, foreground };
+  return segments;
 }

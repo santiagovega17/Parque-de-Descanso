@@ -120,6 +120,7 @@ export function ParcelBlocksLayer() {
     return () => {
       unbindParcelInteractions();
       unbindPasilloInteractions();
+      syncRouteOverlay(svg, null);
       map.removeLayer(overlay);
       overlayRef.current = null;
     };
