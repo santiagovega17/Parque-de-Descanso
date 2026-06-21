@@ -4,6 +4,8 @@ import dynamic from "next/dynamic";
 import { HelpRequestPanel } from "./HelpRequestPanel";
 import { HelpRequestProvider } from "./HelpRequestContext";
 import { MapSelectionProvider } from "./MapSelectionContext";
+import { ParcelSearchPanel } from "./ParcelSearchPanel";
+import { ParcelSearchProvider } from "./ParcelSearchContext";
 import { ParcelSelectionPanel } from "./ParcelSelectionPanel";
 
 const InteractiveMap = dynamic(
@@ -23,11 +25,14 @@ export function MapView() {
   return (
     <HelpRequestProvider>
       <MapSelectionProvider>
-        <div className="relative h-full w-full overflow-hidden bg-background">
-          <InteractiveMap />
-          <ParcelSelectionPanel />
-          <HelpRequestPanel />
-        </div>
+        <ParcelSearchProvider>
+          <div className="relative h-full w-full overflow-hidden bg-background">
+            <InteractiveMap />
+            <ParcelSelectionPanel />
+            <ParcelSearchPanel />
+            <HelpRequestPanel />
+          </div>
+        </ParcelSearchProvider>
       </MapSelectionProvider>
     </HelpRequestProvider>
   );

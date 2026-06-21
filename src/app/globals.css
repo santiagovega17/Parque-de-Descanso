@@ -43,6 +43,20 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+.map-search-input:focus {
+  border-color: rgb(6 78 59 / 0.35);
+  box-shadow: 0 0 0 2px rgb(6 78 59 / 0.12);
+}
+
+.map-search-suggestions {
+  background: rgb(255 255 255 / 0.98);
+}
+
+.map-search-suggestion:focus-visible {
+  outline: 2px solid rgb(6 78 59 / 0.35);
+  outline-offset: -2px;
+}
+
 .touch-map .leaflet-overlay-pane svg.leaflet-image-layer {
   pointer-events: none;
 }

@@ -11,6 +11,7 @@ import {
 } from "@/lib/map/config";
 import { fitFullMap } from "@/lib/map/map-limits";
 import { MapControls } from "./MapControls";
+import { MapParcelFocus } from "./MapParcelFocus";
 import { ParcelBlocksLayer } from "./ParcelBlocksLayer";
 
 function MapViewLimits() {
@@ -63,6 +64,7 @@ export function InteractiveMap() {
       bounceAtZoomLimits={false}
     >
       <ParcelBlocksLayer />
+      <MapParcelFocus />
       <MapViewLimits />
       <MapControls />
     </MapContainer>

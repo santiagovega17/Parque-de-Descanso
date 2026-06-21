@@ -133,6 +133,28 @@ export function selectionPanelDestinationSizers() {
   );
 }
 
+/** Contenido invisible que fija el ancho del cartel de búsqueda. */
+export function searchPanelSizers() {
+  return (
+    <div
+      aria-hidden="true"
+      className="invisible col-start-1 row-start-1 min-w-[min(100%,16rem)]"
+    >
+      <input
+        readOnly
+        tabIndex={-1}
+        className="w-full rounded-xl border px-3 py-2 text-base"
+        defaultValue="Buscar por nombre..."
+      />
+      <ul className="mt-2 rounded-xl border">
+        <li className="px-3 py-2 text-base">Juan Pérez</li>
+        <li className="px-3 py-2 text-base">María García</li>
+        <li className="px-3 py-2 text-base">Carlos López</li>
+      </ul>
+    </div>
+  );
+}
+
 /** Contenido invisible que fija el ancho del cartel de ayuda. */
 export function helpPanelSizers() {
   return (

@@ -1,34 +1,42 @@
 "use client";
 
-import { Bell, Home, Minus, Plus } from "lucide-react";
+import { Bell, Home, Minus, Plus, Search } from "lucide-react";
 import { useMap } from "react-leaflet";
 import { fitFullMap } from "@/lib/map/map-limits";
 import { useHelpRequest } from "./HelpRequestContext";
 import { useMapSelection } from "./MapSelectionContext";
+import { useParcelSearch } from "./ParcelSearchContext";
 
 function ControlButton({
   label,
   onClick,
-  className,
+  className = "",
   pressed,
+  disabled,
+  variant = "default",
   children,
 }: {
   label: string;
   onClick?: () => void;
   className?: string;
   pressed?: boolean;
+  disabled?: boolean;
+  variant?: "default" | "help";
   children: React.ReactNode;
 }) {
+  const variantClassName =
+    variant === "help"
+      ? "bg-red-600 text-white ring-red-900/20 active:bg-red-700"
+      : "bg-white/95 text-emerald-900 ring-emerald-900/10 active:bg-emerald-50";
+
   return (
     <button
       type="button"
       aria-label={label}
       aria-pressed={pressed}
+      disabled={disabled}
       onClick={onClick}
-      className={`map-control-btn flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg ring-1 transition active:scale-95 ${
-        className ??
-        "bg-white/95 text-2xl font-semibold text-emerald-900 ring-emerald-900/10 active:bg-emerald-50"
-      }`}
+      className={`map-control-btn flex h-16 w-16 items-center justify-center rounded-2xl text-2xl font-semibold shadow-lg ring-1 transition active:scale-95 ${variantClassName} ${className}`}
     >
       {children}
     </button>
@@ -41,8 +49,10 @@ export function MapControls() {
   const map = useMap();
   const { helpActive, openHelpConfirm } = useHelpRequest();
   const { clearSelection } = useMapSelection();
+  const { isOpen: searchOpen, toggleSearch, closeSearch } = useParcelSearch();
 
   const handleHelpClick = () => {
+    closeSearch();
     clearSelection();
     openHelpConfirm();
   };
@@ -51,12 +61,22 @@ export function MapControls() {
     <div className="pointer-events-none absolute right-6 bottom-8 z-[1000] flex flex-col gap-3">
       <div className="pointer-events-auto flex flex-col gap-3">
         <ControlButton
+          label="Buscar parcela"
+          pressed={searchOpen}
+          disabled={helpActive}
+          onClick={toggleSearch}
+          className={`${
+            searchOpen ? "ring-2 ring-emerald-300" : ""
+          } ${helpActive ? "cursor-not-allowed opacity-50" : ""}`}
+        >
+          <Search aria-hidden="true" className={controlIconClass} />
+        </ControlButton>
+        <ControlButton
           label="Pedir ayuda"
+          variant="help"
           pressed={helpActive}
           onClick={handleHelpClick}
-          className={`bg-red-600 text-white ring-red-900/20 active:bg-red-700 ${
-            helpActive ? "ring-2 ring-red-300" : ""
-          }`}
+          className={helpActive ? "ring-2 ring-red-300" : ""}
         >
           <Bell aria-hidden="true" className={controlIconClass} />
         </ControlButton>

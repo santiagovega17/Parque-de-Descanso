@@ -57,3 +57,11 @@ export const MAP_TABLET_MAX_WIDTH = 1280;
 
 /** En tablet, la vista home equivale a MAP_FIT_ZOOM_OFFSET + N clics en +. */
 export const MAP_TABLET_HOME_ZOOM_IN_STEPS = 3;
+
+/** Márgenes al centrar una parcela buscada (presentación en PC / pantalla ancha). */
+export const PARCEL_FOCUS_PADDING_DESKTOP = {
+  top: 72,
+  right: 112,
+  bottom: 112,
+  left: 80,
+} as const;
